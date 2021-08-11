@@ -13,11 +13,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "install-client": "cd client && npm install",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "postinstall": "npm run build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
