@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'todos.apps.TodosConfig',
     'users',
     'summaries',
-    'comments',
     'rest_framework',
     'corsheaders',
 ]
