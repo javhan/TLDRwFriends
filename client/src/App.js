@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import axios from "axios";
 
 function App() {
+  const [url, setUrl] = useState("");
+
+  const handleChange = (e) => {
+    const val = e.target.value;
+    console.log(val);
+    setUrl(val);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    axios
+      .get(url)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>TLDRwithFriends</h1>
+      <form onSubmit={handleSubmit}>
+        <input type="text" placeholder="Enter URL" onChange={handleChange} />
+        <input type="submit" value="Submit" />
+      </form>
+    </>
   );
 }
 
