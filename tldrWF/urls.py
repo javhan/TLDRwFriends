@@ -29,6 +29,7 @@ router.register(r'todos', TodoViewSet) #register "/todos" routes
 urlpatterns = [
     # add all of our router urls
     path('', include(router.urls)),
+    path('', include('users.urls')),
     path('', TemplateView.as_view(template_name='index.html')),
     path('login/', TemplateView.as_view(template_name='index.html')),
     path('admin/', admin.site.urls),
