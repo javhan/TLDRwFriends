@@ -46,7 +46,10 @@ INSTALLED_APPS = [
     'todos.apps.TodosConfig',
     'users',
     'summaries',
+<<<<<<< HEAD
     'comments',
+=======
+>>>>>>> 994bef0 (created summaries model)
     'rest_framework',
     'corsheaders',
 ]
