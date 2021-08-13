@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .api import CommentViewSet
+from .views import CommentViewSet
 
 router = routers.DefaultRouter()
 router.register('api/comments', CommentViewSet, 'comments')
