@@ -16,7 +16,6 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -24,6 +23,7 @@ urlpatterns = [
     # path('', include(router.urls)),
     path('', include('comments.urls')),
     path('', include('users.urls')),
+    path('', include('summaries.urls')),
     path('', TemplateView.as_view(template_name='index.html')),
     path('login/', TemplateView.as_view(template_name='index.html')),
     path('admin/', admin.site.urls),

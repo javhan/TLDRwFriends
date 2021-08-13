@@ -1,10 +1,8 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views import View
-from django.core.serializers import serialize
+from comments.models import Comment
+from rest_framework import viewsets, permissions
+from .serializers import CommentSerializer
 
-import json
-
-from .helpers import GetBody
-from .models import Comment
-# Create your views here.
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = CommentSerializer
