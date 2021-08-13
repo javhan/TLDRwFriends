@@ -1,11 +1,11 @@
 from django.db import models
 from users.models import CustomUser
-# from comments.models import Comments
+from comments.models import Comment
 from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 class Summary(models.Model):
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         CustomUser, 
         on_delete=models.CASCADE
         )
@@ -20,7 +20,7 @@ class Summary(models.Model):
         models.CharField(max_length=25),
         size=10,
         )
-    # comments = models.ForeignKey(
-    #     Comments
-    #     on_delete=models.CASCADE
-    #     )
+    comments = models.ForeignKey(
+        Comment,
+        on_delete=models.CASCADE
+        )

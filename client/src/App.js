@@ -1,35 +1,21 @@
 import "./App.css";
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
+import { Route, Switch, Redirect, Link } from "react-router-dom";
+import SignIn from "./components/SignIn"
+import Homepage from "./components/Homepage"
 
 function App() {
-  const [url, setUrl] = useState("");
-
-  const handleChange = (e) => {
-    const val = e.target.value;
-    console.log(val);
-    setUrl(val);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    axios
-      .get(url)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
-  };
+  
 
   return (
-    <>
-      <h1>TLDRwithFriends</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Enter URL" onChange={handleChange} />
-        <input type="submit" value="Submit" />
-      </form>
-    </>
+    <div className="App">
+      <main>
+        <Switch>
+          <Route exact path="/" component={Homepage} />
+          <Route path="/login" component={SignIn} />
+        </Switch>
+      </main>
+  </div>
   );
 }
 
