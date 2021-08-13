@@ -22,5 +22,6 @@ class Summary(models.Model):
         )
     comments = models.ForeignKey(
         Comment,
+        null=True,
         on_delete=models.CASCADE
         )
