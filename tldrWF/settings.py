@@ -45,7 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'summaries',
+<<<<<<< HEAD
     'comments',
+=======
+>>>>>>> 994bef0 (created summaries model)
     'rest_framework',
     'corsheaders',
 ]
