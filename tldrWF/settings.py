@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 import django_heroku
-import rest_framework
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 if not os.environ.get("PRODUCTION"):
     from dotenv import load_dotenv
@@ -162,7 +162,7 @@ django_heroku.settings(locals())
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':
     [
-        'rest_framework.permissions.IsAuthenticatedOrReadyOnly',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
