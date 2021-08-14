@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'summaries',
     'comments',
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
 ]
 
@@ -162,5 +163,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':
     [
         'rest_framework.permissions.IsAuthenticatedOrReadyOnly',
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.autentication.JWTAuthentication',
+    )
 }
