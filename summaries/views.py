@@ -31,6 +31,16 @@ class SummaryViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def list(self, request):
+        queryset = Summary.objects.all()
+        serializer = SummarySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Summary.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = SummarySerializer(user)
+        return Response(serializer.data)
     # def perform_create(self, serializer):
     #     #serializer.content = the spacy output goes here
     #     #scraper(serializer.url)
@@ -44,7 +54,3 @@ class SummaryViewSet(viewsets.ModelViewSet):
         #     print("user")
         # else:
         #     print("cui")
-    
-    # @action(detail=True, methods=['get'])
-    # def get_queryset(self):
-    #     return Summary.objects.all()

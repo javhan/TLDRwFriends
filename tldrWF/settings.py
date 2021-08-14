@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 import django_heroku
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 if not os.environ.get("PRODUCTION"):
     from dotenv import load_dotenv
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'summaries',
     'comments',
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
 ]
 
@@ -156,3 +158,13 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':
+    [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
