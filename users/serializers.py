@@ -1,8 +1,27 @@
 from django.db.models import fields
-from rest_framework import serializers
+from rest_framework import serializers, response, status
 from users.models import CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True, 'min_length' : 6, 'required': True}}
+
+    def create(self, validated_data):
+        '''
+        augment UserSerializer to hash password
+        '''
+        user = super(UserSerializer, self).create(validated_data)
+        user.set_password(validated_data['password'])
+        '''
+        validating and saving the data that has been changed
+        '''
+        user.save()
+        return user
+    
+    # def create(self, validated_data):
+    #     user = super(UserSerializer, self).create(validated_data)
+    #     user.set_password(validated_data['password'])
+    #     user.save()
+    #     return response.Response(status=status.HTTP_201_CREATED)

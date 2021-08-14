@@ -1,0 +1,26 @@
+.Homepage {
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10%;
+    text-align: left;
+}
+
+.url-field {
+    border:solid 1px #D0D4D9;
+    border-radius: 5px;
+    line-height: 20px;
+    margin-right: 10px;
+}
+
+.btn {
+    height: 28px;
+    width: 100px;
+    background-color: #eb6553;
+    border:solid 0px #D0D4D9;
+    border-radius: 5px;
+    font-size: 10px;
+    color: white;
+    font-family: 'Open Sans';
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    cursor: pointer;
+}
