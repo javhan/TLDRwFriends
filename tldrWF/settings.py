@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 import django_heroku
+import rest_framework
 
 if not os.environ.get("PRODUCTION"):
     from dotenv import load_dotenv
@@ -156,3 +157,10 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':
+    [
+        'rest_framework.permissions.IsAuthenticatedOrReadyOnly',
+    ]
+}
