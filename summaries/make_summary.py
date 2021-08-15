@@ -29,7 +29,7 @@ print("max freq",max_frequency)
 
 for word in topics.keys():
     topics[word] = topics[word]/max_frequency
-# pp(topics)
+pp(topics)
 
 
 #* sentence tokenization
@@ -44,7 +44,7 @@ for sent in sentence_tokens:
                 sentence_scores[sent] = topics[word]
             else:
                 sentence_scores[sent] += topics[word]
-# pp(sentence_scores)
+pp(sentence_scores)
 
 select_length = min(int(len(sentence_tokens)*TLDR_LEVEL),MAX_SENTENCES)
 print("trimmed to ",select_length,"sentences")
