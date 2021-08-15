@@ -27,10 +27,10 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     # add all of our router urls
     # path('', include(router.urls)),
+    path('', TemplateView.as_view(template_name='index.html')),
     path('', include('comments.urls')),
     path('', include('users.urls')),
     path('', include('summaries.urls')),
-    path('', TemplateView.as_view(template_name='index.html')),
     path('login/', TemplateView.as_view(template_name='index.html')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
