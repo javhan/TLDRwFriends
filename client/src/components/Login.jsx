@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import axiosInstance from "../axios";
+import { LoggedContext } from "../App.js";
 import Nav from "./Nav";
 
 import {
@@ -58,6 +59,7 @@ export default function Login() {
     password: "",
   });
 
+  const loggedContext = useContext(LoggedContext);
   const [formData, updateFormData] = useState(initialFormData);
 
   const handleChange = (e) => {
@@ -84,7 +86,7 @@ export default function Login() {
         console.log(res.data)
         let base64Url = res.data.access.split(".")[1];
         let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        var jsonPayload = decodeURIComponent(
+        let jsonPayload = decodeURIComponent(
           atob(base64)
             .split("")
             .map(function (c) {
@@ -93,6 +95,7 @@ export default function Login() {
             .join("")
         );
         console.log(JSON.parse(jsonPayload));
+        loggedContext.setLogState(JSON.parse(jsonPayload))
         history.push("/");
       });
   };
