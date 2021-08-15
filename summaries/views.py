@@ -15,7 +15,9 @@ class SummaryViewSet(viewsets.ModelViewSet):
     #     user = self.get_object()
     #     print("Test")
     #     return Response("Hi")
-
+    def get_queryset(self):
+        user = self.request.user
+        return Summary.objects.filter(user=user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

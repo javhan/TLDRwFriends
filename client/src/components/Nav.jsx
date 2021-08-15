@@ -10,6 +10,9 @@ function Nav(props) {
                 <Link to="/">Home</Link>
             </div>
             <div className="navRight">
+                <Link to="/logout">Logout</Link>
+            </div>
+            <div className="navRight">
                 <Link to="/login">Login</Link>
             </div>
             <div className="navRight">
