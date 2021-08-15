@@ -1,6 +1,7 @@
-import React, {useState} from "react";
-import {useHistory} from 'react-router-dom';
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import axiosInstance from "../axios";
+import { LoggedContext } from "../App.js";
 import Nav from "./Nav";
 
 import {
@@ -54,37 +55,50 @@ export default function Login() {
   const classes = useStyles();
   const history = useHistory();
   const initialFormData = Object.freeze({
-    username: '',
-    password:'',
-  })
+    username: "",
+    password: "",
+  });
 
+  const loggedContext = useContext(LoggedContext);
   const [formData, updateFormData] = useState(initialFormData);
 
   const handleChange = (e) => {
     updateFormData({
       ...formData,
-      [e.target.name]: e.target.value.trim()
-    })
-  }
+      [e.target.name]: e.target.value.trim(),
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     axiosInstance
-    .post(`token/`, {
-      username: formData.username,
-      password: formData.password,
-    })
-    .then((res) => {
-      localStorage.setItem('access_token', res.data.access);
-      localStorage.setItem('refresh_token', res.data.refresh);
-      axiosInstance.defaults.headers['Authorization'] = 
-        'JWT ' + localStorage.getItem('access_token');
-      history.push('/')
-      console.log(res.data)
-    })
-  }
-  
+      .post(`token/`, {
+        username: formData.username,
+        password: formData.password,
+      })
+      .then((res) => {
+        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("refresh_token", res.data.refresh);
+        axiosInstance.defaults.headers["Authorization"] =
+          "JWT " + localStorage.getItem("access_token");
+        console.log("TEST", localStorage.getItem("access_token"));
+        console.log(res.data)
+        let base64Url = res.data.access.split(".")[1];
+        let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        let jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map(function (c) {
+              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join("")
+        );
+        console.log(JSON.parse(jsonPayload));
+        loggedContext.setLogState(JSON.parse(jsonPayload))
+        history.push("/");
+      });
+  };
 
   return (
     <Nav>

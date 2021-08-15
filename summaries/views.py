@@ -7,7 +7,7 @@ from .serializers import SummarySerializer
 from .scraper import scraper
 # Create your views here.
 class SummaryViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = SummarySerializer
 
     # @action( methods=['post'],detail=True)
@@ -15,10 +15,6 @@ class SummaryViewSet(viewsets.ModelViewSet):
     #     user = self.get_object()
     #     print("Test")
     #     return Response("Hi")
-    def get_queryset(self):
-        user = self.request.user
-        return Summary.objects.filter(user=user)
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         print("DATA", request.data)
@@ -34,15 +30,17 @@ class SummaryViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def list(self, request):
-        queryset = Summary.objects.all()
+        user = self.request.user
+        print(user)
+        queryset = Summary.objects.filter(user_id=user)
         serializer = SummarySerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
-        queryset = Summary.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = SummarySerializer(user)
-        return Response(serializer.data)
+    # def retrieve(self, request, pk=None):
+    #     queryset = Summary.objects.all()
+    #     user = get_object_or_404(queryset, pk=pk)
+    #     serializer = SummarySerializer(user)
+    #     return Response(serializer.data)
     # def perform_create(self, serializer):
     #     #serializer.content = the spacy output goes here
     #     #scraper(serializer.url)

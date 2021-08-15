@@ -9,15 +9,13 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True, 'min_length' : 6, 'required': True}}
 
     def create(self, validated_data):
-        '''
-        augment UserSerializer to hash password
-        '''
+        """ augment UserSerializer to hash password """
         user = super(UserSerializer, self).create(validated_data)
         user.set_password(validated_data['password'])
-        '''
-        validating and saving the data that has been changed
-        '''
+        
+        """ validating and saving the data that has been changed """    
         user.save()
+
         return user
     
     # def create(self, validated_data):

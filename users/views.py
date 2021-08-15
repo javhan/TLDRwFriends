@@ -6,6 +6,10 @@ from rest_framework import viewsets, permissions, response, status
 from rest_framework.views import APIView
 from .serializers import UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+# these 2 lines allow us to edit simple JWT payload
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 # CustomUser viewset
 class CustomUserViewSet(viewsets.ModelViewSet):
@@ -33,7 +37,25 @@ class BlacklistTokenView(APIView):
             return response.Response(status=status.HTTP_205_RESET_CONTENT)
             
         except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)            
+
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        token['first_name']= user.first_name
+        token['bio'] = user.bio
+        # ...
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 # class BlacklistTokenUpdateView(APIView):
 #     permission_classes = [permissions.AllowAny]
