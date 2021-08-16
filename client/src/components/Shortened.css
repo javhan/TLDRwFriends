@@ -1,0 +1,21 @@
+.SBody {
+    display: flex;
+}
+
+.sLeft {
+    flex: 2
+}
+
+.sRight {
+    flex:1;
+    display: flex;
+    flex-direction: column
+}
+
+.SRtop {
+    flex:1;
+}
+
+.SRbottom {
+    flex: 1;
+}

@@ -8,18 +8,24 @@ from django.shortcuts import get_object_or_404
 class GetSummaryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = SummarySerializer
+    queryset = Summary.objects.filter(user_id=None)
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         scraped = scraper(serializer.validated_data['url'])
-        serializer.validated_data['content'] = scraped['content']
-        serializer.validated_data['title'] = scraped['title']
-        
-        serializer.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        if scraped:
+            serializer.validated_data['content'] = scraped['content']
+            serializer.validated_data['title'] = scraped['title']
+            serializer.validated_data['tags'] = scraped['tags']
+            
+            serializer.save()
+            headers = self.get_success_headers(serializer.data)
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else: 
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class SummaryViewSet(viewsets.ModelViewSet):
     queryset = Summary.objects.all()

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Nav from "./Nav";
 import "./Homepage.css";
-import axios from "axios";
+import axiosInstance from "../axios"
 
 function Homepage() {
+  const history = useHistory()
   const [url, setUrl] = useState("");
-  const POST_ROUTE = "https://tldrwf.herokuapp.com/api/summary";
+  const [summary, setSummary] = useState([])
 
   const handleChange = (e) => {
     const val = e.target.value;
@@ -15,20 +17,16 @@ function Homepage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("HI");
-    // const headers = {
-    //   'Content-Type': 'application/json',
-    //   'Authorization': 'ADD JWT STUFF HERE'
-    // }
-
-    // axios
-    //   .post(POST_ROUTE, data, {
-    //     headers: headers
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => console.log(err));
+    
+    axiosInstance
+    .post(`shorten/`, {
+        "url": url
+    })
+    .then((res) => {
+      console.log("res: ", res)
+      setSummary(res.data.content)
+      history.push('/shortened', res.data)
+    })
   };
 
   return (

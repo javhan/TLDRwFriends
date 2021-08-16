@@ -7,6 +7,7 @@ import Homepage from "./components/Homepage";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import Vault from "./components/Vault"
+import Shortened from "./components/Shortened"
 
 export const LoggedContext = createContext();
 
@@ -44,6 +45,7 @@ function App() {
             <Route path="/logout" component={Logout} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/vault" component={Vault} />
+            <Route path="/shortened" component={Shortened} />
           </Switch>
         </main>
       </LoggedContext.Provider>

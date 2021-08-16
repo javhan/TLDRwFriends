@@ -5,12 +5,14 @@ from heapq import nlargest
 # from wikiscraper import text
 
 def make_summary(text):
+    print("TEXT", text)
     nlp = spacy.load("en_core_web_sm")
     doc = nlp(text)
 
     scraped = {
         "content" : [],
-        "title" : ""
+        "title" : "",
+        "tags": [],
     }
 
     TLDR_LEVEL = 0.5
@@ -26,9 +28,12 @@ def make_summary(text):
                 topics[selected_word] = 1
             else:
                 topics[selected_word] += 1        
-
+    if len(topics.values()) == 0: return
     max_frequency = max(topics.values())
     # print("max freq",max_frequency)
+
+    #* add article topics as suggested tags
+    scraped['tags'] = list(topics.keys())
 
     for word in topics.keys():
         topics[word] = topics[word]/max_frequency
