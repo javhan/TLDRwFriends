@@ -15,7 +15,3 @@ def scraper(url):
     
     summary["title"] = article.title 
     return summary
-
-    # article.nlp() #* activate this for using article.summary
-    # return article.summary
-

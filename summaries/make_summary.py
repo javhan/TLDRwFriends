@@ -60,3 +60,4 @@ def make_summary(text):
     # final_summary = [word.text for word in summary]
     # scraped.content = " ".join(final_summary)
     return scraped
+
