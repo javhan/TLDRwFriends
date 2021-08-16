@@ -48,7 +48,6 @@ class SummaryViewSet(viewsets.ModelViewSet):
     This view allows logged in users to view their personal summaries. 
     Allows for all CRUD methods. 
     """
-    queryset = Summary.objects.all()
     serializer_class = SummarySerializer
     permission_classes = [permissions.IsAuthenticated]
 

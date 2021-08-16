@@ -94,7 +94,7 @@ export default function Login() {
             })
             .join("")
         );
-        console.log(JSON.parse(jsonPayload));
+        console.log("TEST", JSON.parse(jsonPayload));
         loggedContext.setLogState(JSON.parse(jsonPayload))
         history.push("/");
       });

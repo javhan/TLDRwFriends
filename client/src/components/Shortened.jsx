@@ -60,7 +60,7 @@ function Shortened(props) {
         }
         axiosInstance
         .patch(`summaries-save/${props.location.state.id}/`, {
-            "user_id" : loggedContext.logState.user_id
+            "user" : loggedContext.logState.user_id
         })
         .then((res) => {
             console.log(res)

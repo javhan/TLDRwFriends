@@ -8,7 +8,6 @@ import { Button, Grid, Link, Paper, Typography } from '@material-ui/core';
 function Homepage() {
   const history = useHistory()
   const [url, setUrl] = useState("");
-  const [summary, setSummary] = useState([])
 
   const handleChange = (e) => {
     const val = e.target.value;
@@ -25,7 +24,6 @@ function Homepage() {
     })
     .then((res) => {
       console.log("res: ", res)
-      setSummary(res.data.content)
       history.push('/shortened', res.data)
     })
   };

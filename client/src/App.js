@@ -13,6 +13,7 @@ export const LoggedContext = createContext();
 
 function App() {
   const [logState, setLogState] = useState();
+  console.log("TESTING APP", JSON.stringify(logState))
 
   useEffect(() => {
     let accessToken = localStorage.getItem("access_token");
@@ -29,8 +30,8 @@ function App() {
         })
         .join("")
     );
-    setLogState(jsonPayload);
-  });
+    setLogState(JSON.parse(jsonPayload));
+  }, []);
 
   const onOff = { logState, setLogState };
 

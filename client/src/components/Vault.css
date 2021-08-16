@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    flex-direction: column
+}
+
+.topHalf {
+    display: flex;
+    flex-direction: row;
+    height: 60%;
+    margin-top: 3%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+ul {
+    list-style-type: none;
+    text-align: left;
+}
+
+li {
+    transition:all 2s ease;
+}
+
+li:hover {
+    cursor: pointer;
+}
+
+.topics {
+    flex: 1
+}
+
+.results {
+    flex: 4;
+    display: inline;
+    overflow: scroll;
+    height: 100%
+}
+
+span {
+    overflow: auto
+}
+
+.bottomHalf {
+    height: 40%;
+    margin-top: 3%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
