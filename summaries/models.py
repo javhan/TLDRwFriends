@@ -27,3 +27,4 @@ class Summary(models.Model):
         on_delete=models.CASCADE
         )
     url = models.TextField(blank=True, null=True)
+    title = models.TextField(blank=True, null=True)

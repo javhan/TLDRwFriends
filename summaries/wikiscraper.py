@@ -5,12 +5,12 @@ import re
 from bs4 import BeautifulSoup
 
 #! choose wiki topic here
-param = 'amy winehouse'
-URL = f"https://en.wikipedia.org/wiki/{param}"
 
+# param = 'amy winehouse'
+# URL = f"https://en.wikipedia.org/wiki/{param}"
 
 #* newspaper article summary comparison
-#  URL = "https://www.straitstimes.com/singapore/consumer/some-disgruntled-diners-fake-vaccination-certificates-in-first-week-of-dining-in"
+URL = "https://www.nytimes.com/2021/08/14/us/politics/afghanistan-biden-taliban.html"
 
 response = requests.get(
     url=URL
