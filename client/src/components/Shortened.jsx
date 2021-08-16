@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: 0,
       },
     },
+    btn:{
+        marginRight: 10
+    }
   }));
 
 function Shortened(props) {
@@ -55,19 +58,24 @@ function Shortened(props) {
         if (!loggedContext.logState) {
             history.push("/login")
         }
-
         axiosInstance
-        .patch(`shorten/${props.location.state}`)
-        // props.location.state.user
-        // use axios to go here 'api/summaries' and then trigger partial update()
+        .patch(`summaries-save/${props.location.state.id}/`, {
+            "user_id" : loggedContext.logState.user_id
+        })
+        .then((res) => {
+            console.log(res)
+        })
+    }
+
+    const handleComment = () => {
+        console.log("WIP")
     }
 
     return (
     <Nav>
         <div className="SBody">
         <div className="sLeft">
-            <Paper className={classes.mainFeaturedPost}>
-            {/* Increase the priority of the hero background image */}
+            <Paper className={classes.mainFeaturedPost}>            
             {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
             <div className={classes.overlay} />
             <Grid container>
@@ -87,8 +95,8 @@ function Shortened(props) {
                     <Typography variant="h6" color="inherit" paragraph align="left">
                     tags: {post.tags.join(", ")}
                     </Typography>
-                    <Button variant="contained" onClick={handleSave}>Save</Button>
-                    <Button variant="contained" color="primary">Comment</Button>
+                    <Button variant="contained" className="btn" onClick={handleSave}>Save</Button>
+                    <Button variant="contained" className="btn" color="primary" onClick={handleComment}>Comment</Button>
                 </div>
                 </Grid>
             </Grid>

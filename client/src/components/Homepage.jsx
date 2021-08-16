@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import Nav from "./Nav";
 import "./Homepage.css";
 import axiosInstance from "../axios"
+import { Button, Grid, Link, Paper, Typography } from '@material-ui/core';
 
 function Homepage() {
   const history = useHistory()
@@ -19,7 +20,7 @@ function Homepage() {
     e.preventDefault();
     
     axiosInstance
-    .post(`shorten/`, {
+    .post(`summaries-shorten/`, {
         "url": url
     })
     .then((res) => {
@@ -32,7 +33,7 @@ function Homepage() {
   return (
     <Nav>
       <div className="Homepage">
-        <h1>TLDRwithFriends</h1>
+        <h1>TLDRwithFriends</h1>      
         <form onSubmit={handleSubmit}>
           <input
             className="url-field"

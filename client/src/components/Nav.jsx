@@ -5,6 +5,7 @@ import "./Nav.css";
 
 function Nav(props) {
   const loggedContext = useContext(LoggedContext);
+  console.log(loggedContext?.logState)
 
   if (!loggedContext.logState) {
     return (
@@ -30,6 +31,8 @@ function Nav(props) {
           <div className="navLeft">
             <Link to="/">Home</Link>
           </div>
+          {loggedContext && <div className="navLeft">Hello,
+               {loggedContext?.logState?.username}</div>}
           <div className="navRight">
             <Link to="/logout">Logout</Link>
           </div>
