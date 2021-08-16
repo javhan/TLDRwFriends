@@ -3,6 +3,7 @@ from rest_framework import serializers, viewsets, permissions, status
 from rest_framework.response import Response
 from .serializers import SummarySerializer
 from .scraper import scraper
+from django.shortcuts import get_object_or_404
 # Create your views here.
 class GetSummaryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
@@ -21,19 +22,22 @@ class GetSummaryViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class SummaryViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    queryset = Summary.objects.all()
     serializer_class = SummarySerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-    def list(self, request):
+    def list(self, request, *args):
         user = self.request.user
-        print(user)
         queryset = Summary.objects.filter(user_id=user)
+        print("THIS IS FROM SUMMARY VIEW SET", user)
         serializer = SummarySerializer(queryset, many=True)
         return Response(serializer.data)
 
-    # def retrieve(self, request, pk=None):
-    #     queryset = Summary.objects.all()
-    #     user = get_object_or_404(queryset, pk=pk)
-    #     serializer = SummarySerializer(user)
-    #     return Response(serializer.data)
+    def retrieve(self, request, pk=None):
+        user = self.request.user
+        queryset = Summary.objects.filter(user_id=user)
+        filtering = get_object_or_404(queryset, pk=pk)
+        serializer = SummarySerializer(filtering)
+        print("serializer",serializer)
+        return Response(serializer.data)
 
