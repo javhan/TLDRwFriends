@@ -1,8 +1,9 @@
 from rest_framework import routers
-from .views import SummaryViewSet
+from .views import SummaryViewSet, GetSummaryViewSet
 
 router = routers.DefaultRouter()
 router.register('api/summaries', SummaryViewSet, 'summaries')
+router.register('api/shorten', GetSummaryViewSet, 'shorten')
 
 urlpatterns = router.urls
 
