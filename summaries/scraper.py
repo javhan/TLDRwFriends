@@ -6,12 +6,14 @@ def scraper(url):
 
     article.download()
     article.parse()
-    article.nlp()
+    # article.nlp()
 
     print(article.text)
     print(article.title)
     summary = make_summary(article.text) 
     print(summary)  
     
+    if summary == None: return
+
     summary["title"] = article.title 
     return summary
