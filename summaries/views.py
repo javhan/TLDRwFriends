@@ -1,11 +1,16 @@
 from summaries.models import Summary
-from rest_framework import serializers, viewsets, permissions, status
+from rest_framework import serializers, viewsets, permissions, status, mixins
 from rest_framework.response import Response
 from .serializers import SummarySerializer
 from .scraper import scraper
 from django.shortcuts import get_object_or_404
-# Create your views here.
-class GetSummaryViewSet(viewsets.ModelViewSet):
+
+
+class GetSummaryViewSet(mixins.CreateModelMixin,viewsets.GenericViewSet):
+    """ 
+    This view allows anyone (including public) to create a summary via CREATE. 
+    No other methods allowed. 
+    """
     permission_classes = [permissions.AllowAny]
     serializer_class = SummarySerializer
     queryset = Summary.objects.filter(user_id=None)
@@ -27,7 +32,22 @@ class GetSummaryViewSet(viewsets.ModelViewSet):
         else: 
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+class SaveSummaryViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """  
+    This view allows logged in users to save his/her summary via UPDATE (summary table's user_id column). 
+    No other methods allowed.  
+    """
+    queryset = Summary.objects.filter(user_id=None)
+    serializer_class = SummarySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class SummaryViewSet(viewsets.ModelViewSet):
+    """ 
+    This view allows logged in users to view their personal summaries. 
+    Allows for all CRUD methods. 
+    """
     queryset = Summary.objects.all()
     serializer_class = SummarySerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -35,7 +55,6 @@ class SummaryViewSet(viewsets.ModelViewSet):
     def list(self, request, *args):
         user = self.request.user
         queryset = Summary.objects.filter(user_id=user)
-        print("THIS IS FROM SUMMARY VIEW SET", user)
         serializer = SummarySerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -46,4 +65,3 @@ class SummaryViewSet(viewsets.ModelViewSet):
         serializer = SummarySerializer(filtering)
         print("serializer",serializer)
         return Response(serializer.data)
-
