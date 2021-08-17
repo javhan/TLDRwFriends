@@ -4,7 +4,7 @@ const baseURL = "http://localhost:8000/api/";
 
 const axiosInstance = axios.create({
   baseURL: baseURL,
-  timeout: 5000,
+  timeout: 30000,
   headers: {
     Authorization: localStorage.getItem("access_token")
       ? "JWT " + localStorage.getItem("access_token")
@@ -21,7 +21,9 @@ axiosInstance.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
-
+    
+    
+    
     // If server isn't working
     if (typeof error.response === "undefined") {
       alert(
@@ -29,6 +31,16 @@ axiosInstance.interceptors.response.use(
           "Looks like CORS might be the problem. " +
           "Sorry about this - we will get it fixed shortly."
       );
+      return Promise.reject(error);
+    }
+
+    if (error.response.status === 404) {
+      alert("Please Input A Non-Paywalled Article/Non-PDF URL");
+      return Promise.reject(error);
+    }
+
+    if (error.response.status === 500) {
+      alert("Please Enter A Valid URL");
       return Promise.reject(error);
     }
     // Prevents looping of creating refresh tokens
