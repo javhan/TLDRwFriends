@@ -41,13 +41,14 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function Shortened(props) {
-    console.log(props)
+    const post = props?.location.state;
+
+    const [isSaved, setSaved] = useState(post.user)
     const classes = useStyles();
     const history = useHistory()
 
     const loggedContext = useContext(LoggedContext);
 
-    const post = props?.location.state;
 
     const contentMapped = post.content.map((item) => {
     return <li>{item}</li>;
@@ -63,6 +64,7 @@ function Shortened(props) {
             "user" : loggedContext.logState.user_id
         })
         .then((res) => {
+            setSaved(post.user)
             console.log(res)
         })
     }
@@ -74,10 +76,11 @@ function Shortened(props) {
             history.push("/login")
         }
         axiosInstance
-        .patch(`summaries-save/${props.location.state.id}/`, {
-            "user" : undefined
+        .patch(`summaries-remove/${props.location.state.id}/`, {
+            "user" : ""
         })
         .then((res) => {
+            setSaved()
             console.log(res)
         })
     }
@@ -110,13 +113,13 @@ function Shortened(props) {
                     <Typography variant="h6" color="inherit" paragraph align="left">
                     tags: {post.tags.join(", ")}
                     </Typography>
-                    {!post.user &&
-                        <Button variant="contained" className="btn" onClick={handleSave}>Save</Button>
+                    {!isSaved &&
+                        <Button variant="contained" className="btn" onClick={handleSave} style={{width: '110px'}}>Save</Button>
                     }
-                    {post.user && 
-                        <Button variant="contained" className="btn" onClick={handleRemove}>Remove</Button>
+                    {isSaved && 
+                        <Button variant="contained" className="btn" onClick={handleRemove} style={{width: '110px'}}>Remove</Button>
                     }               
-                    <Button variant="contained" className="btn" color="primary" onClick={handleComment}>Comment</Button>
+                    <Button variant="contained" className="btn" color="primary" onClick={handleComment} style={{width: '110px'}}>Comment</Button>
                 </div>
                 </Grid>
             </Grid>

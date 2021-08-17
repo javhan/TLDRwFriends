@@ -1,9 +1,10 @@
 from rest_framework import routers
-from .views import SummaryViewSet, GetSummaryViewSet, SaveSummaryViewSet
+from .views import SummaryViewSet, GetSummaryViewSet, SaveSummaryViewSet, RemoveSummaryViewSet
 
 router = routers.DefaultRouter()
 router.register('api/summaries', SummaryViewSet, 'summaries')
 router.register('api/summaries-save', SaveSummaryViewSet, 'summaries-save')
+router.register('api/summaries-remove', RemoveSummaryViewSet, 'summaries-remove')
 router.register('api/summaries-shorten', GetSummaryViewSet, 'summaries-shorten')
 
 urlpatterns = router.urls

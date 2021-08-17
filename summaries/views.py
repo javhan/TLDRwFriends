@@ -38,9 +38,51 @@ class SaveSummaryViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     This view allows logged in users to save his/her summary via UPDATE (summary table's user_id column). 
     No other methods allowed.  
     """
+    #summaries-remove/user_id
     queryset = Summary.objects.filter(user_id=None)
     serializer_class = SummarySerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+
+class RemoveSummaryViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = Summary.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = SummarySerializer
+
+
+    # //api/summaries-remove?summary_id=89
+    # //api/summaries-remove/
+    # //api/summaries-remove/<user_id>/<pk>
+    
+    
+    # def update(self, request, *args, **kwargs):
+    #     kwargs['partial'] = True
+    #     user = self.request.user
+    #     summary_id = 
+    #     queryset = Summary.objects.filter(user_id=summary_id)
+
+    #     return self.update(request, *args, **kwargs)
+    
+# def update(self, request, *args, **kwargs):
+#         partial = kwargs.pop('partial', False)
+#         instance = self.get_object()
+#         serializer = self.get_serializer(instance, data=request.data, partial=partial)
+#         serializer.is_valid(raise_exception=True)
+#         self.perform_update(serializer)
+
+#         if getattr(instance, '_prefetched_objects_cache', None):
+#             # If 'prefetch_related' has been applied to a queryset, we need to
+#             # forcibly invalidate the prefetch cache on the instance.
+#             instance._prefetched_objects_cache = {}
+
+#         return Response(serializer.data)
+
+#     def perform_update(self, serializer):
+#         serializer.save()
+
+#     def partial_update(self, request, *args, **kwargs):
+#         kwargs['partial'] = True
+#         return self.update(request, *args, **kwargs)
 
 
 class SummaryViewSet(viewsets.ModelViewSet):
