@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import axiosInstance from "../axios";
 import Nav from "./Nav";
 import "./Vault.css";
@@ -28,6 +29,7 @@ const useStyles = makeStyles({
 });
 
 function Vault() {
+  const history = useHistory();
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const [vault, setVault] = useState();
@@ -48,6 +50,10 @@ function Vault() {
     }
   });
 
+  const readMore = (post) => {
+    history.push("/shortened", post);
+  };
+
   const results = vault?.data?.map((post) => {
     if (selectedTopic === "all") {
       return (
@@ -62,12 +68,14 @@ function Vault() {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">Learn More</Button>
+            <Button size="small" onClick={() => readMore(post)}>
+              Read More
+            </Button>
           </CardActions>
         </Card>
       );
     } else {
-      if (post.tags.includes(selectedTopic)) {
+      if (post?.tags?.includes(selectedTopic)) {
         return (
           <Card className={classes.root}>
             <CardContent>
@@ -80,7 +88,7 @@ function Vault() {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Button size="small" onClick={() => readMore(post)}>Read More</Button>
             </CardActions>
           </Card>
         );
