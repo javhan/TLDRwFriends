@@ -11,6 +11,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
+  Card,
   Divider,
   Grid,
   Link,
@@ -60,6 +61,7 @@ function Shortened(props) {
   const [expanded, setExpanded] = useState(false);
   const [loadComments, setLoadComments] = useState([]);
   const [commentField, setCommentField] = useState();
+  const [isSelected, setIsSelected] = useState();
   const classes = useStyles();
   const history = useHistory();
 
@@ -72,6 +74,7 @@ function Shortened(props) {
   /***** Managing sending comments into the database*****/
   const handleCommentChange = (e) => {
     console.log(e.target.name);
+    console.log(commentField)
     setCommentField({
       ...commentField,
       [e.target.name]: e.target.value,
@@ -89,30 +92,70 @@ function Shortened(props) {
 
   const deleteComment = (commentID) => {
     axiosInstance.delete(`comments/${commentID}`).then((res) => {
-        if (res.status === 204) {
-            window.location.reload()
-        }
-    })}
+      if (res.status === 204) {
+        window.location.reload();
+      }
+    });
+  };
+
+  const toggleEdit = (commentID) => {
+    if (isSelected === commentID) {
+      setIsSelected()
+    } else {
+      setIsSelected(commentID);
+    }
+  };
+
+  const submitEdit = (commentID) => {
+    axiosInstance.patch(`comments/${commentID}/`, {
+      body: commentField.body
+    }).then(setIsSelected())
+  }
 
   const commentSection = loadComments?.map((comment, index) => {
-    return (
-      <>
-        <Grid item sm={12}>
-          <Typography>{comment.user.username}</Typography>
-          <Typography>{comment.body}</Typography>
-          {comment.user.id === loggedContext?.logState?.user_id && (
-            <>
-              <Button>Edit</Button>
-              <Button onClick={(e) => {
-                  e.preventDefault()
-                  deleteComment(comment.id)
-                  }}>Delete</Button>
-            </>
-          )}
-        </Grid>
-        <Divider />
-      </>
-    );
+    if (isSelected === comment.id) {
+      return (
+        <>
+          <Grid item sm={12}>
+            <Card>
+            <Typography>{comment.user.username}</Typography>
+            <TextField
+              defaultValue={comment.body}
+              name="body"
+              onChange={handleCommentChange}
+            />
+            <Button onClick={() => submitEdit(comment.id)}>Save</Button>
+            <Button onClick={toggleEdit}>Cancel</Button>
+            </Card>
+          </Grid>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Grid item sm={12}>
+            <Card>
+            <Typography>{comment.user.username}</Typography>
+            <Typography>{comment.body}</Typography>
+            {comment.user.id === loggedContext?.logState?.user_id && (
+              <>
+                <Button onClick={() => toggleEdit(comment.id)}>Edit</Button>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    deleteComment(comment.id);
+                  }}
+                >
+                  Delete
+                </Button>
+              </>
+            )}
+            </Card>
+          </Grid>
+          <Divider />
+        </>
+      );
+    }
   });
 
   const contentMapped = post.content.map((item, index) => {
@@ -276,9 +319,7 @@ function Shortened(props) {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography className={classes.heading}>
-                View Comments
-              </Typography>
+              <Typography className={classes.heading}>View Comments</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Grid container>{commentSection}</Grid>
