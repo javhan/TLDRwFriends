@@ -5,6 +5,8 @@ def scraper(url):
     article = Article(url)
 
     article.download()
+    print("GOT ARTICLE?", article.download())
+    if (article.download() == None): return "failed"
     article.parse()
     # article.nlp()
 

@@ -18,7 +18,11 @@ class GetSummaryViewSet(mixins.CreateModelMixin,viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        print("CHECKKING", scraper(serializer.validated_data['url']))
+        if scraper(serializer.validated_data['url']) == "failed":
+            return Response(status=status.HTTP_512_NETWORK_URL_INVALID)
         scraped = scraper(serializer.validated_data['url'])
+        
 
         if scraped:
             serializer.validated_data['content'] = scraped['content']
@@ -45,44 +49,13 @@ class SaveSummaryViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     
 
 class RemoveSummaryViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """ 
+    This view allows logged in users to remove a summary from their vault (sets user_id to None from summary object). 
+    No other methods allowed.
+    """
     queryset = Summary.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = SummarySerializer
-
-
-    # //api/summaries-remove?summary_id=89
-    # //api/summaries-remove/
-    # //api/summaries-remove/<user_id>/<pk>
-    
-    
-    # def update(self, request, *args, **kwargs):
-    #     kwargs['partial'] = True
-    #     user = self.request.user
-    #     summary_id = 
-    #     queryset = Summary.objects.filter(user_id=summary_id)
-
-    #     return self.update(request, *args, **kwargs)
-    
-# def update(self, request, *args, **kwargs):
-#         partial = kwargs.pop('partial', False)
-#         instance = self.get_object()
-#         serializer = self.get_serializer(instance, data=request.data, partial=partial)
-#         serializer.is_valid(raise_exception=True)
-#         self.perform_update(serializer)
-
-#         if getattr(instance, '_prefetched_objects_cache', None):
-#             # If 'prefetch_related' has been applied to a queryset, we need to
-#             # forcibly invalidate the prefetch cache on the instance.
-#             instance._prefetched_objects_cache = {}
-
-#         return Response(serializer.data)
-
-#     def perform_update(self, serializer):
-#         serializer.save()
-
-#     def partial_update(self, request, *args, **kwargs):
-#         kwargs['partial'] = True
-#         return self.update(request, *args, **kwargs)
 
 
 class SummaryViewSet(viewsets.ModelViewSet):
@@ -95,6 +68,8 @@ class SummaryViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args):
         user = self.request.user
+        print(self.request.user.last_name)
+        print("WHAT USER DOES", user)
         queryset = Summary.objects.filter(user_id=user)
         serializer = SummarySerializer(queryset, many=True)
         return Response(serializer.data)

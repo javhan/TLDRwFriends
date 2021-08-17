@@ -31,7 +31,6 @@ const useStyles = makeStyles({
 function Vault() {
   const history = useHistory();
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
   const [vault, setVault] = useState();
   const [selectedTopic, setSelectedTopic] = useState("all");
   useEffect(() => {

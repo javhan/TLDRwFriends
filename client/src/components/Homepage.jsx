@@ -69,10 +69,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
 function Homepage() {
     const classes = useStyles();
     const history = useHistory();
     const [url, setUrl] = useState("");
+    console.log(history.location.pathname)
 
     const handleChange = (e) => {
         const val = e.target.value;
@@ -89,7 +91,7 @@ function Homepage() {
             })
             .then((res) => {
                 console.log("res: ", res);
-                history.push("/shortened", res.data);
+                history.push("/shortened", res?.data);
             });
         
     };

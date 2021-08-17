@@ -1,6 +1,5 @@
 from django.db import models
 from users.models import CustomUser
-from comments.models import Comment
 from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
@@ -20,11 +19,6 @@ class Summary(models.Model):
         models.CharField(max_length=25, null=True),
         size=10,
         null=True,
-        )
-    comments = models.ForeignKey(
-        Comment,
-        null=True,
-        on_delete=models.CASCADE
         )
     url = models.TextField(blank=True, null=True)
     title = models.TextField(blank=True, null=True)
