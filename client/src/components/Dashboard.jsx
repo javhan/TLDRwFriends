@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import axiosInstance from "../axios";
+import Nav from "./Nav"
 
 function Dashboard() {
 
@@ -11,9 +12,9 @@ function Dashboard() {
     }, [])
 
     return (
-        <div>
+        <Nav>
             
-        </div>
+        </Nav>
     )
 }
 

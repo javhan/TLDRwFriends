@@ -60,7 +60,22 @@ function Shortened(props) {
         }
         axiosInstance
         .patch(`summaries-save/${props.location.state.id}/`, {
-            "user_id" : loggedContext.logState.user_id
+            "user" : loggedContext.logState.user_id
+        })
+        .then((res) => {
+            console.log(res)
+        })
+    }
+
+    const handleRemove = (e) => {
+        console.log("remove id")
+        e.preventDefault();
+        if (!loggedContext.logState) {
+            history.push("/login")
+        }
+        axiosInstance
+        .patch(`summaries-save/${props.location.state.id}/`, {
+            "user" : undefined
         })
         .then((res) => {
             console.log(res)
@@ -95,7 +110,12 @@ function Shortened(props) {
                     <Typography variant="h6" color="inherit" paragraph align="left">
                     tags: {post.tags.join(", ")}
                     </Typography>
-                    <Button variant="contained" className="btn" onClick={handleSave}>Save</Button>
+                    {!post.user &&
+                        <Button variant="contained" className="btn" onClick={handleSave}>Save</Button>
+                    }
+                    {post.user && 
+                        <Button variant="contained" className="btn" onClick={handleRemove}>Remove</Button>
+                    }               
                     <Button variant="contained" className="btn" color="primary" onClick={handleComment}>Comment</Button>
                 </div>
                 </Grid>
