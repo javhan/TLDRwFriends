@@ -2,10 +2,13 @@ import spacy
 from pprint import pp
 from heapq import nlargest
 
-# from wikiscraper import text
+"""Settings for Summary Processing"""
+TLDR_LEVEL = 0.5
+MAX_SENTENCES = 5
+MAX_TOPICS = 5
+ENTITY_ARRAY = ["ORG", "PRODUCT", "PERSON", "NORG", "GPE"]
 
 def make_summary(text):
-    print("TEXT", text)
     nlp = spacy.load("en_core_web_sm")
     doc = nlp(text)
 
@@ -15,32 +18,26 @@ def make_summary(text):
         "tags": [],
     }
 
-    TLDR_LEVEL = 0.5
-    MAX_SENTENCES = 5
-
-    #* Iterate over the predicted entities
+    """Iterate over the predicted entities"""
     topics = {}
     for ent in doc.ents:
-        """ Print the entity text and its label """    
-        if ent.label_ in ["ORG", "PRODUCT", "PERSON"]:
+        if ent.label_ in ENTITY_ARRAY:
             selected_word = ent.text.lower()
             if selected_word not in topics.keys():
                 topics[selected_word] = 1
             else:
                 topics[selected_word] += 1        
-    if len(topics.values()) == 0: return
-    max_frequency = max(topics.values())
-    # print("max freq",max_frequency)
 
-    #* add article topics as suggested tags
-    scraped['tags'] = list(topics.keys())
+    if len(topics.values()) == 0: return 
+    #exit if we failed to get any values for topic (bad processing)
+    
+    """ Weight sentences by topics """
+    max_frequency = max(topics.values())
 
     for word in topics.keys():
         topics[word] = topics[word]/max_frequency
-    # pp(topics)
 
-
-    #* sentence tokenization
+    #sentence tokenization
     sentence_tokens = [sent for sent in doc.sents]
 
     sentence_scores = {}
@@ -61,8 +58,27 @@ def make_summary(text):
     summary = nlargest(select_length, sentence_scores, key = sentence_scores.get)
     scraped["content"] = summary
 
-    # print("FINAL SUMMARY", summary)
-    # final_summary = [word.text for word in summary]
-    # scraped.content = " ".join(final_summary)
+    """ Extract topics from chosen sentences"""
+    scraped['tags'] = list(get_topics(str(summary)))
+
     return scraped
 
+#* add article topics as suggested tags
+def get_topics(text):
+
+    nlp = spacy.load("en_core_web_sm")
+    doc = nlp(text)
+
+    #* Iterate over the predicted entities
+    topics = {}
+
+    for ent in doc.ents: 
+        if ent.label_ in ENTITY_ARRAY:
+            selected_topic = ent.text.lower()
+            if selected_topic not in topics.keys():
+                topics[selected_topic] = 1
+            else:
+                topics[selected_topic] += 1  
+    
+    topics = nlargest(MAX_TOPICS, topics, key=topics.get)
+    return topics
