@@ -2,7 +2,7 @@ from summaries.models import Summary
 from rest_framework import serializers, viewsets, permissions, status, mixins
 from rest_framework.response import Response
 from .serializers import SummarySerializer
-from .scraper import scraper
+from .scraperv2 import scraper
 from django.shortcuts import get_object_or_404
 
 
@@ -20,7 +20,7 @@ class GetSummaryViewSet(mixins.CreateModelMixin,viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         print("CHECKKING", scraper(serializer.validated_data['url']))
         if scraper(serializer.validated_data['url']) == "failed":
-            return Response(status=status.HTTP_512_NETWORK_URL_INVALID)
+            return Response(status=status.HTTP_505_HTTP_VERSION_NOT_SUPPORTED)
         scraped = scraper(serializer.validated_data['url'])
         
 
