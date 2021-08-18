@@ -14,16 +14,6 @@ const SimilarNews = ({ topic }) => {
     // const gNews = `https://gnews.io/api/v4/search?q=${topic}&token=${gNewsKey}&lang=en`;
     // console.log(gNews);
 
-    // useEffect(() => {
-    //     fetch(gNews)
-    //         .then((res) => {
-    //             return res.json();
-    //         })
-    //         .then((data) => {
-    //             setData(data.articles[0]);
-    //         });
-    // }, [gNews]);
-
     const options = {
         method: "GET",
         url: "https://free-news.p.rapidapi.com/v1/search",

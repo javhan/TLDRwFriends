@@ -294,6 +294,8 @@ function Shortened(props) {
                                         variant="subtitle1"
                                         color="secondary"
                                         href={post.url}
+                                        target="_blank"
+                                        rel="noreferrer"
                                     >
                                         Explore more...
                                     </Link>
