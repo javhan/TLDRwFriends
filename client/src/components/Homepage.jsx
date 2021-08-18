@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import Nav from "./Nav";
 import "./Homepage.css";
+import Nav from "./Nav";
 import axiosInstance from "../axios";
+import LoadingOverlay from "react-loading-overlay";
 
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -19,6 +20,7 @@ import {
 } from "@material-ui/core";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import CallMadeIcon from "@material-ui/icons/CallMadeSharp";
+import WrapTextIcon from "@material-ui/icons/WrapText";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,6 +75,7 @@ function Homepage() {
     const classes = useStyles();
     const history = useHistory();
     const [url, setUrl] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const val = e.target.value;
@@ -82,6 +85,7 @@ function Homepage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(!loading);
 
         axiosInstance
             .post(`summaries-shorten/`, {
@@ -90,6 +94,11 @@ function Homepage() {
             .then((res) => {
                 console.log("res: ", res);
                 history.push("/shortened", res?.data);
+            })
+            .catch((err) => {
+                console.log(err);
+                setUrl("");
+                setLoading(!loading);
             });
     };
 
@@ -97,125 +106,132 @@ function Homepage() {
         <Nav>
             <div className={classes.root}>
                 <Paper className={classes.paper}>
-                    <div className={classes.section1}>
-                        <Grid item sm>
-                            <Typography
-                                variant="h4"
-                                component="h1"
-                                className={classes.title}
-                            >
-                                TLDRwithFriends
-                            </Typography>
-                        </Grid>
-                    </div>
-                    <div className={classes.section2}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={9}>
-                                <TextField
-                                    id="outlined-basic"
-                                    label="Enter URL"
-                                    variant="outlined"
-                                    color="secondary"
-                                    placeholder="TLDR this"
-                                    onChange={handleChange}
-                                    fullWidth
-                                    gutterBottom
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={3}>
-                                {url ? (
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        className={classes.button}
-                                        onClick={handleSubmit}
-                                        endIcon={
-                                            <ScheduleIcon fontSize="small" />
-                                        }
-                                    >
-                                        Let's Save Time!
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        className={classes.button}
-                                        onClick={handleSubmit}
-                                        endIcon={
-                                            <ScheduleIcon fontSize="small" />
-                                        }
-                                        disabled
-                                    >
-                                        Let's Add A URL.
-                                    </Button>
-                                )}
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={4}>
+                    <LoadingOverlay
+                        active={loading}
+                        spinner
+                        text="Storing your saved time..."
+                    >
+                        <div className={classes.section1}>
+                            <Grid item sm>
                                 <Typography
-                                    color="textSecondary"
-                                    variant="subtitle2"
-                                    className={classes.subtitle}
-                                    endIcon={<CallMadeIcon />}
-                                    gutterBottom
+                                    variant="h4"
+                                    component="h1"
+                                    className={classes.title}
                                 >
-                                    Just drop your link and TLDR it{"  "}
-                                    <CallMadeIcon
-                                        color="secondary"
-                                        style={{ fontSize: 13 }}
-                                    />
+                                    TLDRwithFriends
                                 </Typography>
                             </Grid>
-                        </Grid>
-                    </div>
-                    <div className={classes.section3}>
-                        <Grid container spacing={2}>
-                            <Card className={classes.desCard} elevation={0}>
-                                <CardContent>
+                        </div>
+                        <div className={classes.section2}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={9}>
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Enter URL"
+                                        variant="outlined"
+                                        color="secondary"
+                                        placeholder="TLDR this"
+                                        onChange={handleChange}
+                                        fullWidth
+                                        gutterBottom
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={3}>
+                                    {url ? (
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            className={classes.button}
+                                            onClick={handleSubmit}
+                                            endIcon={
+                                                loading ? (
+                                                    <WrapTextIcon fontSize="small" />
+                                                ) : (
+                                                    <ScheduleIcon fontSize="small" />
+                                                )
+                                            }
+                                        >
+                                            {loading
+                                                ? "..."
+                                                : "Let's Save Time!"}
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.button}
+                                            onClick={handleSubmit}
+                                            disabled
+                                        >
+                                            Let's Add A URL.
+                                        </Button>
+                                    )}
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={4}>
                                     <Typography
-                                        className={classes.des}
-                                        variant="body"
-                                        component="p"
+                                        color="textSecondary"
+                                        variant="subtitle2"
+                                        className={classes.subtitle}
+                                        endIcon={<CallMadeIcon />}
+                                        gutterBottom
                                     >
-                                        No time to read your favourite articles?
-                                        Want a gist of what your friend just
-                                        sent you so that you can tell them you
-                                        read it? Then use{" "}
-                                        <strong>TLDRwithFriends</strong> to get
-                                        an easily digestible and comprehensible
-                                        summary of those 15 minute articles you
-                                        just can’t find the time to read!
-                                    </Typography>
-                                    <Divider />
-                                    <Typography
-                                        className={classes.vp}
-                                        // color="textSecondary"
-                                    >
-                                        What you get:
-                                    </Typography>
-                                    <ListItem>
-                                        <ListItemText secondary=" - Quick Summary of the article" />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemText secondary=" - Primers" />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemText secondary=" - Links discussing same topic" />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemText
-                                            secondary=" - TLDR Vault to store all your
-                                                articles"
+                                        Just drop your link and TLDR it{"  "}
+                                        <CallMadeIcon
+                                            color="secondary"
+                                            style={{ fontSize: 13 }}
                                         />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemText secondary=" - Saved Friendships" />
-                                    </ListItem>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </div>
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        </div>
+                        <div className={classes.section3}>
+                            <Grid container spacing={2}>
+                                <Card className={classes.desCard} elevation={0}>
+                                    <CardContent>
+                                        <Typography
+                                            className={classes.des}
+                                            variant="body"
+                                            component="p"
+                                        >
+                                            No time to read your favourite
+                                            articles? Want a gist of what your
+                                            friend just sent you so that you can
+                                            tell them you read it? Then use{" "}
+                                            <strong>TLDRwithFriends</strong> to
+                                            get an easily digestible and
+                                            comprehensible summary of those 15
+                                            minute articles you just can’t find
+                                            the time to read!
+                                        </Typography>
+                                        <Divider />
+                                        <Typography className={classes.vp}>
+                                            What you get:
+                                        </Typography>
+                                        <ListItem>
+                                            <ListItemText secondary=" - Quick Summary of the article" />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemText secondary=" - Primers" />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemText secondary=" - Links discussing same topic" />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemText
+                                                secondary=" - TLDR Vault to store all your
+                                            articles"
+                                            />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemText secondary=" - Saved Friendships" />
+                                        </ListItem>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </div>
+                    </LoadingOverlay>
                 </Paper>
             </div>
         </Nav>

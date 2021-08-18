@@ -50,10 +50,11 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.grey[800],
         color: theme.palette.common.white,
         marginBottom: theme.spacing(4),
-        //   backgroundImage: 'url(https://source.unsplash.com/random)',
-        //   backgroundSize: 'cover',
-        //   backgroundRepeat: 'no-repeat',
-        //   backgroundPosition: 'center',
+        padding: "1em",
+        backgroundImage: "url(https://source.unsplash.com/7egErEz8_OY)",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
     },
     overlay: {
         position: "absolute",
@@ -72,9 +73,9 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     btn: {
-        marginRight: 10,
+        marginTop: 10,
     },
-    comments: {
+    commentsBox: {
         backgroundColor: "WhiteSmoke",
     },
 }));
@@ -299,7 +300,7 @@ function Shortened(props) {
                                 >
                                     <Typography
                                         component="h1"
-                                        variant="h5"
+                                        variant="title"
                                         color="inherit"
                                         gutterBottom
                                     >
@@ -333,29 +334,36 @@ function Shortened(props) {
                                         tags: {post?.tags?.join(", ")}
                                     </Typography>
                                     {loggedContext.logState && (
-                                        <Grid container spacing={2}>
+                                        <Grid
+                                            container
+                                            spacing={2}
+                                            style={{
+                                                backgroundColor:
+                                                    "DarkSlateGrey",
+                                                display: "flex",
+                                                padding: "0.1em",
+                                            }}
+                                        >
                                             <Grid item xs={12} sm={9}>
                                                 <TextField
-                                                    // id="outlined-basic"
-                                                    label="Enter Comment"
-                                                    variant="filled"
+                                                    label="Pen your thoughts here"
+                                                    variant="outlined"
                                                     name="body"
                                                     color="secondary"
-                                                    placeholder="Pen your thoughts here"
                                                     onChange={
                                                         handleCommentChange
                                                     }
                                                     fullWidth
                                                     gutterBottom
+                                                    error
                                                 />
                                             </Grid>
                                             <Grid item xs={12} sm={3}>
                                                 <Button
-                                                    variant="contained"
-                                                    className="btn"
-                                                    color="primary"
+                                                    variant="outlined"
+                                                    className={classes.btn}
+                                                    color="secondary"
                                                     onClick={handleComment}
-                                                    style={{ width: "110px" }}
                                                 >
                                                     Comment
                                                 </Button>
