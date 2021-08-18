@@ -7,11 +7,11 @@ def scraper(url):
     if (article.html == None ): return "failed"
     article.parse()
 
-    print(article.text)
-    print(article.title)
+    # print(article.text)
+    # print(article.title)
 
     summary = make_summary(article.text)
-    print(summary)
+    # print(summary)
 
     if summary == None: return
 
