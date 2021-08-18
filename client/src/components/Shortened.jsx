@@ -61,6 +61,7 @@ function Shortened(props) {
     const [expanded, setExpanded] = useState(false);
     const [loadComments, setLoadComments] = useState([]);
     const [commentField, setCommentField] = useState();
+    const [commentEditField, setCommentEditField] = useState();
     const [isSelected, setIsSelected] = useState();
     const [fetcher, toggleFetcher] = useState(1);
     const classes = useStyles();
@@ -74,10 +75,16 @@ function Shortened(props) {
 
     /***** Managing sending comments into the database*****/
     const handleCommentChange = (e) => {
-        console.log(e.target.name);
         console.log(commentField);
         setCommentField({
             ...commentField,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleCommentEditChange = (e) => {
+        setCommentEditField({
+            ...commentEditField,
             [e.target.name]: e.target.value,
         });
     };
@@ -94,7 +101,13 @@ function Shortened(props) {
                 summary: post?.id,
                 user: loggedContext?.logState?.user_id,
             })
-            .then(toggleFetcher((fetcher) => fetcher + 1));
+            .then((res) => {
+                if (res.status === 201) {
+                    toggleFetcher((fetcher) => fetcher + 1);
+                    setCommentField("");
+                    //! write some code for triggering accordion if it's not expanded
+                }
+            });
     };
 
     const deleteComment = (commentID) => {
@@ -116,9 +129,14 @@ function Shortened(props) {
     const submitEdit = (commentID) => {
         axiosInstance
             .patch(`comments/${commentID}/`, {
-                body: commentField.body,
+                body: commentEditField.body,
             })
-            .then(setIsSelected());
+            .then((res) => {
+                if (res.status === 200) {
+                    toggleFetcher((fetcher) => fetcher + 1);
+                    setIsSelected();
+                }
+            });
     };
 
     const commentSection = loadComments?.map((comment, index) => {
@@ -127,11 +145,13 @@ function Shortened(props) {
                 <>
                     <Grid item sm={12}>
                         <Card>
-                            <Typography>{comment.user.username}</Typography>
+                            <Typography variant="subtitle1">
+                                {comment.user.username}
+                            </Typography>
                             <TextField
                                 defaultValue={comment.body}
                                 name="body"
-                                onChange={handleCommentChange}
+                                onChange={handleCommentEditChange}
                             />
                             <Button onClick={() => submitEdit(comment.id)}>
                                 Save
@@ -226,7 +246,7 @@ function Shortened(props) {
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
+    }, [fetcher]);
 
     return (
         <Nav>
@@ -248,7 +268,7 @@ function Shortened(props) {
                                 >
                                     <Typography
                                         component="h1"
-                                        variant="h3"
+                                        variant="h5"
                                         color="inherit"
                                         gutterBottom
                                     >
@@ -256,9 +276,9 @@ function Shortened(props) {
                                     </Typography>
                                     <br />
                                     <Typography
-                                        variant="h6"
+                                        variant="body"
                                         color="inherit"
-                                        paragraph
+                                        component="p"
                                         align="left"
                                     >
                                         {contentMapped}
@@ -272,7 +292,7 @@ function Shortened(props) {
                                         Explore more...
                                     </Link>
                                     <Typography
-                                        variant="h6"
+                                        variant="body2"
                                         color="inherit"
                                         paragraph
                                         align="left"
@@ -344,7 +364,7 @@ function Shortened(props) {
                             id="panel1bh-header"
                         >
                             <Typography className={classes.heading}>
-                                View Comments
+                                View Comments({loadComments.length})
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
