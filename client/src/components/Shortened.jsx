@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { LoggedContext } from "../App.js";
 import Nav from "./Nav";
 import SimilarNews from "./SimilarNews.jsx";
-import "./Shortened.css";
+// import "./Shortened.css";
 import axiosInstance from "../axios";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -25,7 +25,25 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxHeight: "100vh",
+        height: "90vh",
+        display: "flex",
+        padding: "1em",
+    },
+    sLeft: {
+        flex: 2,
+        overflowY: "scroll",
+        overflowX: "hidden",
+    },
+    sRight: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+    },
+    SRtop: {
+        flex: 1,
+    },
+    SRbottom: {
+        flex: 1,
     },
     mainFeaturedPost: {
         position: "relative",
@@ -55,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
     },
     btn: {
         marginRight: 10,
+    },
+    comments: {
+        backgroundColor: "WhiteSmoke",
     },
 }));
 
@@ -201,7 +222,11 @@ function Shortened(props) {
     });
 
     const contentMapped = post.content.map((item, index) => {
-        return <li key={index}>{item}</li>;
+        return (
+            <Typography variant="body2" key={index} align="justify">
+                - {item}
+            </Typography>
+        );
     });
 
     /***** Managing Saving/Deleting Summary For Vault Purposes *****/
@@ -255,9 +280,9 @@ function Shortened(props) {
     }, [fetcher]);
 
     return (
-        <Nav className={classes.root}>
-            <div className="SBody">
-                <div className="sLeft">
+        <Nav>
+            <div className={classes.root}>
+                <div className={classes.sLeft}>
                     <Paper className={classes.mainFeaturedPost}>
                         {
                             <img
@@ -377,13 +402,28 @@ function Shortened(props) {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid container>{commentSection}</Grid>
+                            <Grid container className={classes.comments}>
+                                {commentSection}
+                            </Grid>
                         </AccordionDetails>
                     </Accordion>
                 </div>
-                <div className="sRight">
-                    <div className="SRtop">Primers</div>
-                    <div className="SRbottom">
+                <div className={classes.sRight}>
+                    <div className={classes.SRtop}>
+                        <Typography
+                            variant="h5"
+                            style={{ backgroundColor: "Gainsboro" }}
+                        >
+                            Primers
+                        </Typography>
+                    </div>
+                    <div className={classes.SRbottom}>
+                        <Typography
+                            variant="h5"
+                            style={{ backgroundColor: "Gainsboro" }}
+                        >
+                            Similar News
+                        </Typography>
                         {post && <SimilarNews topic={post.tags[0]} />}
                     </div>
                 </div>
