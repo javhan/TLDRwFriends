@@ -83,6 +83,10 @@ function Shortened(props) {
     };
 
     const handleComment = (e) => {
+        if (!commentField || commentField?.body?.trim() === "") {
+            alert("Comment Empty");
+            return;
+        }
         e.preventDefault();
         axiosInstance
             .post(`comments-post/`, {
@@ -273,13 +277,13 @@ function Shortened(props) {
                                         paragraph
                                         align="left"
                                     >
-                                        tags: {post.tags.join(", ")}
+                                        tags: {post?.tags?.join(", ")}
                                     </Typography>
                                     {loggedContext.logState && (
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={9}>
                                                 <TextField
-                                                    id="outlined-basic"
+                                                    // id="outlined-basic"
                                                     label="Enter Comment"
                                                     variant="filled"
                                                     name="body"
