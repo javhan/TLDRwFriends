@@ -2,9 +2,10 @@ import React, { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { LoggedContext } from "../App.js";
 import Nav from "./Nav";
-import "./Shortened.css";
+import SimilarNews from "./SimilarNews.jsx";
+// import "./Shortened.css";
 import axiosInstance from "../axios";
-// import PropTypes from 'prop-types';
+
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Accordion,
@@ -24,7 +25,25 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxHeight: "100vh",
+        height: "90vh",
+        display: "flex",
+        padding: "1em",
+    },
+    sLeft: {
+        flex: 2,
+        overflowY: "scroll",
+        overflowX: "hidden",
+    },
+    sRight: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+    },
+    SRtop: {
+        flex: 1,
+    },
+    SRbottom: {
+        flex: 1,
     },
     mainFeaturedPost: {
         position: "relative",
@@ -55,10 +74,19 @@ const useStyles = makeStyles((theme) => ({
     btn: {
         marginRight: 10,
     },
+    comments: {
+        backgroundColor: "WhiteSmoke",
+    },
 }));
 
 function Shortened(props) {
+    const classes = useStyles();
+    const history = useHistory();
+    const loggedContext = useContext(LoggedContext);
+
     const post = props?.location?.state;
+
+    console.log(post);
 
     const [isSaved, setSaved] = useState(post.user);
     const [expanded, setExpanded] = useState(false);
@@ -67,10 +95,6 @@ function Shortened(props) {
     const [commentEditField, setCommentEditField] = useState();
     const [isSelected, setIsSelected] = useState();
     const [fetcher, toggleFetcher] = useState(1);
-    const classes = useStyles();
-    const history = useHistory();
-
-    const loggedContext = useContext(LoggedContext);
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -198,7 +222,11 @@ function Shortened(props) {
     });
 
     const contentMapped = post.content.map((item, index) => {
-        return <li key={index}>{item}</li>;
+        return (
+            <Typography variant="body2" key={index} align="justify">
+                - {item}
+            </Typography>
+        );
     });
 
     /***** Managing Saving/Deleting Summary For Vault Purposes *****/
@@ -232,7 +260,7 @@ function Shortened(props) {
                 console.log(res);
             });
     };
-    console.log(loggedContext?.logState?.user_id);
+    console.log(loggedContext?.logState?.post);
 
     // CAN'T ATTACH BODY TO GET, USE PARAMS
     useEffect(() => {
@@ -252,9 +280,9 @@ function Shortened(props) {
     }, [fetcher]);
 
     return (
-        <Nav className={classes.root}>
-            <div className="SBody">
-                <div className="sLeft">
+        <Nav>
+            <div className={classes.root}>
+                <div className={classes.sLeft}>
                     <Paper className={classes.mainFeaturedPost}>
                         {
                             <img
@@ -291,6 +319,8 @@ function Shortened(props) {
                                         variant="subtitle1"
                                         color="secondary"
                                         href={post.url}
+                                        target="_blank"
+                                        rel="noreferrer"
                                     >
                                         Explore more...
                                     </Link>
@@ -372,13 +402,30 @@ function Shortened(props) {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid container>{commentSection}</Grid>
+                            <Grid container className={classes.comments}>
+                                {commentSection}
+                            </Grid>
                         </AccordionDetails>
                     </Accordion>
                 </div>
-                <div className="sRight">
-                    <div className="SRtop">Primers</div>
-                    <div className="SRbottom">Similar News</div>
+                <div className={classes.sRight}>
+                    <div className={classes.SRtop}>
+                        <Typography
+                            variant="h5"
+                            style={{ backgroundColor: "Gainsboro" }}
+                        >
+                            Primers
+                        </Typography>
+                    </div>
+                    <div className={classes.SRbottom}>
+                        <Typography
+                            variant="h5"
+                            style={{ backgroundColor: "Gainsboro" }}
+                        >
+                            Similar News
+                        </Typography>
+                        {post && <SimilarNews topic={post.tags[0]} />}
+                    </div>
                 </div>
             </div>
         </Nav>

@@ -18,12 +18,12 @@ class GetSummaryViewSet(mixins.CreateModelMixin,viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print("CHECKKING", scraper(serializer.validated_data['url']))
-        if scraper(serializer.validated_data['url']) == "failed":
-            return Response(status=status.HTTP_505_HTTP_VERSION_NOT_SUPPORTED)
-        scraped = scraper(serializer.validated_data['url'])
-        
 
+        scraped = scraper(serializer.validated_data['url'])
+
+        if scraped == "failed":
+            return Response(status=status.HTTP_505_HTTP_VERSION_NOT_SUPPORTED)    
+        
         if scraped:
             serializer.validated_data['content'] = scraped['content']
             serializer.validated_data['title'] = scraped['title']
