@@ -357,6 +357,7 @@ function Shortened(props) {
                     <Accordion
                         expanded={expanded === "panel1"}
                         onChange={handleChange("panel1")}
+                        disabled={loadComments.length === 0}
                     >
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}

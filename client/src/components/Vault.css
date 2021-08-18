@@ -28,7 +28,6 @@ li:hover {
 
 .topics {
     flex: 1;
-    border: 1px solid;
     margin: 1%;
     overflow-y: scroll;
 }
@@ -38,7 +37,6 @@ li:hover {
     display: inline;
     overflow-y: scroll;
     height: 100%; 
-    border: 1px solid;
     margin: 1%;
 }
 
