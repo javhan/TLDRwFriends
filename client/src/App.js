@@ -15,6 +15,16 @@ function App() {
   const [logState, setLogState] = useState();
   console.log("TESTING APP", JSON.stringify(logState))
 
+  const PrivateRoute = ({component: Component, handleChildFunc, ...rest}) => {
+    return <Route {...rest} render={(props) => (
+      logState !== undefined
+      ? <Component {...props} handleChildFunc={handleChildFunc}/>
+      :<div className="center">Please Login To Access<br/><button className="btstyle"><Link to="/login">Login</Link></button></div>
+    )}
+    />
+  }
+  
+
   useEffect(() => {
     let accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
@@ -45,8 +55,9 @@ function App() {
             <Route path="/signup" component={Register} />
             <Route path="/logout" component={Logout} />
             <Route path="/dashboard" component={Dashboard} />
-            <Route path="/vault" component={Vault} />
+            <PrivateRoute path="/vault" component={Vault} />
             <Route path="/shortened" component={Shortened} />
+            <Redirect to="/"/>
           </Switch>
         </main>
       </LoggedContext.Provider>
