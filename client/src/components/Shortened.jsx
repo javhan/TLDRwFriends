@@ -23,6 +23,9 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        maxHeight: "100vh",
+    },
     mainFeaturedPost: {
         position: "relative",
         backgroundColor: theme.palette.grey[800],
@@ -249,7 +252,7 @@ function Shortened(props) {
     }, [fetcher]);
 
     return (
-        <Nav>
+        <Nav className={classes.root}>
             <div className="SBody">
                 <div className="sLeft">
                     <Paper className={classes.mainFeaturedPost}>
