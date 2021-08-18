@@ -69,12 +69,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 function Homepage() {
     const classes = useStyles();
     const history = useHistory();
     const [url, setUrl] = useState("");
-    console.log(history.location.pathname)
 
     const handleChange = (e) => {
         const val = e.target.value;
@@ -93,7 +91,6 @@ function Homepage() {
                 console.log("res: ", res);
                 history.push("/shortened", res?.data);
             });
-        
     };
 
     return (
@@ -127,31 +124,31 @@ function Homepage() {
                             </Grid>
                             <Grid item xs={12} sm={3}>
                                 {url ? (
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            className={classes.button}
-                                            onClick={handleSubmit}
-                                            endIcon={
-                                                <ScheduleIcon fontSize="small" />
-                                            }
-                                        >
-                                            Let's Save Time!
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            className={classes.button}
-                                            onClick={handleSubmit}
-                                            endIcon={
-                                                <ScheduleIcon fontSize="small" />
-                                            }
-                                            disabled
-                                        >
-                                            Let's Add A URL.
-                                        </Button>
-                                    )}
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.button}
+                                        onClick={handleSubmit}
+                                        endIcon={
+                                            <ScheduleIcon fontSize="small" />
+                                        }
+                                    >
+                                        Let's Save Time!
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.button}
+                                        onClick={handleSubmit}
+                                        endIcon={
+                                            <ScheduleIcon fontSize="small" />
+                                        }
+                                        disabled
+                                    >
+                                        Let's Add A URL.
+                                    </Button>
+                                )}
                             </Grid>
                         </Grid>
                         <Grid container spacing={2}>
