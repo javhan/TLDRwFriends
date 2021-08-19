@@ -1,4 +1,6 @@
 import spacy
+import functools
+from .primerChecker import primerChecker
 from pprint import pp
 from heapq import nlargest
 
@@ -16,6 +18,7 @@ def make_summary(text):
         "content" : [],
         "title" : "",
         "tags": [],
+        "primers": [],
     }
 
     """Iterate over the predicted entities"""
@@ -60,8 +63,19 @@ def make_summary(text):
 
     """ Extract topics from chosen sentences"""
     scraped['tags'] = list(get_topics(str(summary)))
+    # for i in scraped['tags']:
+    #     scraped['primers'].append(primerChecker(i, str(summary)))
 
+    # strSummary = functools.partial(primerChecker, text = str(summary))
+    # result = map(strSummary, scraped['tags'])
+    # scraped['primers'] = result
+    scraped['primers'] = [primerChecker(x,str(summary)) for x in scraped['tags']]
     return scraped
+
+    
+
+    # scraped['primers'] = list(map( primerChecker, scraped['tags']))
+  
 
 #* add article topics as suggested tags
 def get_topics(text):

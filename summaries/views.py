@@ -28,6 +28,7 @@ class GetSummaryViewSet(mixins.CreateModelMixin,viewsets.GenericViewSet):
             serializer.validated_data['content'] = scraped['content']
             serializer.validated_data['title'] = scraped['title']
             serializer.validated_data['tags'] = scraped['tags']
+            serializer.validated_data['primers'] = scraped['primers']
             
             serializer.save()
             headers = self.get_success_headers(serializer.data)
@@ -35,7 +36,6 @@ class GetSummaryViewSet(mixins.CreateModelMixin,viewsets.GenericViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         else: 
             return Response(status=status.HTTP_404_NOT_FOUND)
-
 
 class SaveSummaryViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """  
