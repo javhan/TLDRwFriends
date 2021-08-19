@@ -88,7 +88,6 @@ function Shortened(props) {
 
   const post = props?.location?.state;
 
-  console.log("PROPS", props);
   console.log("POST", post);
 
   const [isSaved, setSaved] = useState(post?.user);
@@ -98,11 +97,19 @@ function Shortened(props) {
   const [commentEditField, setCommentEditField] = useState();
   const [isSelected, setIsSelected] = useState();
   const [fetcher, toggleFetcher] = useState(1);
+  const [newsAPI, setnewAPI] = useState()
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+  
+//   useEffect(() => {
+//       post?.tags?.map((tag) => {
+//           axiosInstance.patch(`summaries-save/${props.location.state.id}/`, {
 
+//           })
+//       })
+//   })
   /***** Managing sending comments into the database*****/
   const handleCommentChange = (e) => {
     console.log(commentField);
@@ -266,10 +273,6 @@ function Shortened(props) {
     }
     return (
         <NewsCard index={index} article={article}/>
-    //   <>
-    //     <h3>What is {primer[0]}</h3>
-    //     <h3>{primer[1]}</h3>
-    //   </>
     );
   });
 
@@ -426,13 +429,13 @@ function Shortened(props) {
             <Typography variant="h5" style={{ backgroundColor: "Gainsboro" }}>
               Primers
             </Typography>
-              {post && primerSection}
+              {primerSection}
           </div>
           <div className={classes.SRbottom}>
             <Typography variant="h5" style={{ backgroundColor: "Gainsboro" }}>
               Similar News
             </Typography>
-            {post && <SimilarNews topic={post.tags[0]} />}
+            <SimilarNews post={post} newsAPI={newsAPI}/>
           </div>
         </div>
       </div>
