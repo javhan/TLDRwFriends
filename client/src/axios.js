@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:8000/api/";
+const baseURL = "https://tldr-with-friends.herokuapp.com/api/";
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
