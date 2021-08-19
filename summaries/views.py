@@ -37,7 +37,6 @@ class GetSummaryViewSet(mixins.CreateModelMixin,viewsets.GenericViewSet):
         else: 
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-
 class SaveSummaryViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """  
     This view allows logged in users to save his/her summary via UPDATE (summary table's user_id column). 
