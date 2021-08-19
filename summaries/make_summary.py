@@ -12,7 +12,7 @@ MAX_TOPICS = 5
 ENTITY_ARRAY = ["ORG", "PRODUCT", "PERSON", "NORG", "GPE"]
 
 def make_summary(text):
-    nlp = spacy.load("en_core_web_md", disable=["tagger", "attribute_ruler", "lemmatizer"])
+    nlp = spacy.load("en_core_web_sm", disable=["tagger", "attribute_ruler", "lemmatizer"])
     doc = nlp(text)
 
     scraped = {
