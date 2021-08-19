@@ -1,4 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
+import axiosInstance from "../../axios";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Button,
@@ -31,6 +33,27 @@ const useStyles = makeStyles({
 
 export default function NewsCard({ article }) {
     const classes = useStyles();
+    const history = useHistory()
+    const [loading, setLoading] = useState('false')
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(!loading);
+
+        axiosInstance
+            .post(`summaries-shorten/`, {
+                url: article.link || article.url,
+            })
+            .then((res) => {
+                console.log("res: ", res);
+                history.push("/shortened", res?.data);
+            })
+            .catch((err) => {
+                console.log(err);                
+                setLoading(!loading);
+            });
+    };
+
 
     return (
         <Card className={classes.root}>
@@ -59,6 +82,7 @@ export default function NewsCard({ article }) {
                     size="small"
                     color="secondary"
                     className={classes.tldr}
+                    onClick={handleSubmit}
                 >
                     TLDR this
                 </Button>}
