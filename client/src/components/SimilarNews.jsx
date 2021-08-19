@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const gNewsKey = process.env.REACT_APP_GNEWS_API_KEY;
+// const gNewsKey = process.env.REACT_APP_GNEWS_API_KEY;
 const RAPIDAPI = process.env.REACT_APP_RAPIDAPI;
 
 const SimilarNews = ({ topic }) => {
