@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axiosInstance from "../../axios";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,7 +9,7 @@ import {
     CardActions,
     CardContent,
     CardMedia,
-    Divider,
+    Grid,
     Link,
     Typography,
 } from "@material-ui/core/";
@@ -27,14 +27,19 @@ const useStyles = makeStyles({
         fontWeight: "bold",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "DarkSlateGray",
+        backgroundColor: "Black",
+    },
+    btn: {
+        display: "flex",
+        flexDirection: "column",
+        marginBottom: "1em",
     },
 });
 
 export default function NewsCard({ article }) {
     const classes = useStyles();
-    const history = useHistory()
-    const [loading, setLoading] = useState('false')
+    const history = useHistory();
+    const [loading, setLoading] = useState("false");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -49,54 +54,70 @@ export default function NewsCard({ article }) {
                 history.push("/shortened", res?.data);
             })
             .catch((err) => {
-                console.log(err);                
+                console.log(err);
                 setLoading(!loading);
             });
     };
 
-
     return (
         <Card className={classes.root}>
-            <CardActionArea>
-                {article.media && <CardMedia
-                    className={classes.media}
-                    image={article.media}
-                    title={article.title}
-                />}
+            <CardActionArea
+                href={article.link || article.url}
+                target="_blank"
+                rel="noreferrer"
+            >
+                {article.media && (
+                    <CardMedia
+                        className={classes.media}
+                        image={article.media}
+                        title={article.title}
+                    />
+                )}
                 <CardContent>
                     <Typography gutterBottom variant="subtitle2">
                         {article.title}
                     </Typography>
-                    {article.summary && <Typography
-                        variant="caption"
-                        color="textSecondary"
-                        component="p"
-                    >
-                        {article?.summary?.slice(0, 100) + "..."}
-                    </Typography>}
+                    {article.summary && (
+                        <Typography
+                            variant="caption"
+                            color="textSecondary"
+                            component="p"
+                        >
+                            {article?.summary?.slice(0, 100) + "..."}
+                        </Typography>
+                    )}
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                {article.media && <Button
-                    variant="contained"
-                    size="small"
-                    color="secondary"
-                    className={classes.tldr}
-                    onClick={handleSubmit}
-                >
-                    TLDR this
-                </Button>}
-                {article.link && <Link
-                    variant="subtitle1"
-                    color="secondary"
-                    href={article.link || article.url}
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    Explore more
-                </Link>}
+                <Grid container className={classes.btn}>
+                    <Grid item sm={3}>
+                        {article.media && (
+                            <Button
+                                variant="contained"
+                                size="small"
+                                color="secondary"
+                                className={classes.tldr}
+                                onClick={handleSubmit}
+                            >
+                                TLDR this
+                            </Button>
+                        )}
+                    </Grid>
+                    <Grid item sm={3}>
+                        {article.link && (
+                            <Link
+                                variant="subtitle1"
+                                color="secondary"
+                                href={article.link || article.url}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Explore more
+                            </Link>
+                        )}
+                    </Grid>
+                </Grid>
             </CardActions>
-            <Divider />
         </Card>
     );
 }

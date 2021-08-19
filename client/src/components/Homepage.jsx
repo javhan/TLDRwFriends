@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import "./Homepage.css";
 import Nav from "./Nav";
 import axiosInstance from "../axios";
 import LoadingOverlay from "react-loading-overlay";
@@ -24,13 +23,14 @@ import WrapTextIcon from "@material-ui/icons/WrapText";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        margin: "auto",
+        margin: "0 auto",
+        marginTop: "10vh",
         width: "80vw",
         height: "50vh",
-        position: "fixed",
-        top: "40%",
-        left: "50%",
-        transform: "translate(-50%,-50%)",
+        // position: "fixed",
+        // top: "40%",
+        // left: "50%",
+        // transform: "translate(-50%,-50%)",
         fontFamily: "Poppins",
     },
     paper: {

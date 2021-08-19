@@ -23,15 +23,21 @@ const RAPIDAPI = process.env.REACT_APP_RAPIDAPI;
 
 const SimilarNews = ({ post, newsAPI }) => {
     const classes = useStyles();
+    const searchQuery = post.title //take first 5 words of title
+        .split(" ")
+        .filter((_, i) => i < 5)
+        .join(" ");
+
+    console.log("searching for ", searchQuery);
 
     const [data, setData] = useState([]);
     const [toggle, setToggle] = useState(post.id);
-    console.log(toggle)
+    console.log(toggle);
     const options = {
         method: "GET",
         url: "https://free-news.p.rapidapi.com/v1/search",
         params: {
-            q: `${post.title}`,
+            q: { searchQuery },
             lang: "en",
             page: "1",
         },
