@@ -1,6 +1,6 @@
 .container {
     display: flex;
-    flex-direction: column
+    flex-direction: column;
 }
 
 .topHalf {
@@ -30,18 +30,20 @@ li:hover {
     flex: 1;
     margin: 1%;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .results {
     flex: 4;
     display: inline;
     overflow-y: scroll;
-    height: 100%; 
+    overflow-x: hidden;
+    height: 100%;
     margin: 1%;
 }
 
 span {
-    overflow: auto
+    overflow: auto;
 }
 
 .bottomHalf {

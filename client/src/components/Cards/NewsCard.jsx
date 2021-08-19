@@ -27,7 +27,12 @@ const useStyles = makeStyles({
         fontWeight: "bold",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "DarkSlateGray",
+        backgroundColor: "Black",
+    },
+    btn: {
+        display: "flex",
+        flexDirection: "column",
+        marginBottom: "1em",
     },
 });
 
@@ -56,7 +61,11 @@ export default function NewsCard({ article }) {
 
     return (
         <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea
+                href={article.link || article.url}
+                target="_blank"
+                rel="noreferrer"
+            >
                 {article.media && (
                     <CardMedia
                         className={classes.media}
@@ -80,7 +89,7 @@ export default function NewsCard({ article }) {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Grid container>
+                <Grid container className={classes.btn}>
                     <Grid item sm={3}>
                         {article.media && (
                             <Button
