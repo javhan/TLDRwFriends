@@ -1,5 +1,6 @@
 import spacy
 import functools
+import concurrent.futures
 from .primerChecker import primerChecker
 from pprint import pp
 from heapq import nlargest
@@ -63,18 +64,18 @@ def make_summary(text):
 
     """ Extract topics from chosen sentences"""
     scraped['tags'] = list(get_topics(str(summary)))
-    # for i in scraped['tags']:
-    #     scraped['primers'].append(primerChecker(i, str(summary)))
-
-    # strSummary = functools.partial(primerChecker, text = str(summary))
-    # result = map(strSummary, scraped['tags'])
-    # scraped['primers'] = result
     strSummary = nlp(str(summary))
-    scraped['primers'] = [primerChecker(x,strSummary) for x in scraped['tags']]
-    return scraped
+    
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        result = executor.map(lambda tag: primerChecker(strSummary,tag), scraped['tags'])
+        scraped['primers'] = list(result)
+        
+        
 
-    # scraped['primers'] = list(map( primerChecker, scraped['tags']))
-  
+    
+    # scraped['primers'] = [primerChecker(tag,strSummary) for tag in scraped['tags']]
+
+    return scraped
 
 #* add article topics as suggested tags
 def get_topics(text):
