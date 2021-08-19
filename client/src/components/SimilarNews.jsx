@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 import NewsCard from "./Cards/NewsCard";
@@ -19,46 +18,47 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const RAPIDAPI = process.env.REACT_APP_RAPIDAPI;
+// const RAPIDAPI = process.env.REACT_APP_RAPIDAPI;
 
-const SimilarNews = ({ post, newsAPI }) => {
+const SimilarNews = ({ post, active, setActive, data }) => {
     const classes = useStyles();
-    const searchQuery = post.title //take first 5 words of title
-        .split(" ")
-        .filter((_, i) => i < 5)
-        .join(" ");
+    const [change, setChange] = useState(data)
+    console.log("POST", post)
+    // const searchQuery = post?.title //take first 5 words of title
+    //     .split(" ")
+    //     .filter((_, i) => i < 5)
+    //     .join(" ");
 
-    console.log("searching for ", searchQuery);
+    // console.log("searching for ", searchQuery);
 
-    const [data, setData] = useState([]);
-    const [toggle, setToggle] = useState(post.id);
-    console.log(toggle);
-    const options = {
-        method: "GET",
-        url: "https://free-news.p.rapidapi.com/v1/search",
-        params: {
-            q: { searchQuery },
-            lang: "en",
-            page: "1",
-        },
-        headers: {
-            "x-rapidapi-key": RAPIDAPI,
-            "x-rapidapi-host": "free-news.p.rapidapi.com",
-        },
-    };
+    // const [data, setData] = useState([]);
 
-    useEffect(() => {
-        axios
-            .request(options)
-            .then((res) => {
-                console.log(res.data);
-                setData(res.data.articles);
-            })
-            .catch((err) => console.log(err));
-    }, [toggle]);
+    // const options = {
+    //     method: "GET",
+    //     url: "https://free-news.p.rapidapi.com/v1/search",
+    //     params: {
+    //         q: searchQuery,
+    //         lang: "en",
+    //         page: "1",
+    //     },
+    //     headers: {
+    //         "x-rapidapi-key": RAPIDAPI,
+    //         "x-rapidapi-host": "free-news.p.rapidapi.com",
+    //     },
+    // };
+
+    // useEffect(() => {
+    //     axios
+    //         .request(options)
+    //         .then((res) => {
+    //             console.log(res.data);
+    //             setData(res.data.articles);
+    //         })
+    //         .catch((err) => console.log(err));
+    // }, [active]);
 
     const mappedArticles = data?.map((article, index) => {
-        return <NewsCard index={index} article={article} />;
+        return <NewsCard key={index} article={article} setActive={setActive} post={post}/>;
     });
 
     return (

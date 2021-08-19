@@ -5,7 +5,9 @@ import Nav from "./Nav";
 import SimilarNews from "./SimilarNews.jsx";
 // import "./Shortened.css";
 import axiosInstance from "../axios";
+import axios from "axios";
 import NewsCard from "./Cards/NewsCard";
+import LoadingOverlay from "react-loading-overlay";
 
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -97,19 +99,13 @@ function Shortened(props) {
   const [commentEditField, setCommentEditField] = useState();
   const [isSelected, setIsSelected] = useState();
   const [fetcher, toggleFetcher] = useState(1);
-  const [newsAPI, setnewAPI] = useState()
+  const [active, setActive] = useState(false);
+  const [data, setData] = useState([]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  
-//   useEffect(() => {
-//       post?.tags?.map((tag) => {
-//           axiosInstance.patch(`summaries-save/${props.location.state.id}/`, {
 
-//           })
-//       })
-//   })
   /***** Managing sending comments into the database*****/
   const handleCommentChange = (e) => {
     console.log(commentField);
@@ -224,7 +220,7 @@ function Shortened(props) {
     }
   });
 
-  const contentMapped = post.content.map((item, index) => {
+  const contentMapped = post?.content?.map((item, index) => {
     return (
       <Typography variant="body2" key={index} align="justify">
         - {item}
@@ -268,12 +264,10 @@ function Shortened(props) {
 
   const primerSection = post?.primers?.map((primer, index) => {
     const article = {
-        title: "What is " + primer[0],
-        link: primer[1],
-    }
-    return (
-        <NewsCard index={index} article={article}/>
-    );
+      title: "What is " + primer[0],
+      link: primer[1],
+    };
+    return <NewsCard index={index} article={article} />;
   });
 
   // CAN'T ATTACH BODY TO GET, USE PARAMS
@@ -293,152 +287,194 @@ function Shortened(props) {
       });
   }, [fetcher]);
 
+    const searchQuery = post?.title //take first 5 words of title
+    .split(" ")
+    .filter((_, i) => i < 5)
+    .join(" ");
+  
+    console.log("searching for ", searchQuery);
+  
+    const RAPIDAPI = process.env.REACT_APP_RAPIDAPI;
+   
+  useEffect(() => {
+      const options = {
+          method: "GET",
+          url: "https://free-news.p.rapidapi.com/v1/search",
+          params: {
+              q: searchQuery,
+              lang: "en",
+              page: "1",
+          },
+          headers: {
+              "x-rapidapi-key": RAPIDAPI,
+              "x-rapidapi-host": "free-news.p.rapidapi.com",
+          },
+      };
+      axios
+          .request(options)
+          .then((res) => {
+              console.log(res.data);
+              res.data.articles.shift()
+              setData(res.data.articles);
+          })
+          .catch((err) => console.log(err));
+  }, [post?.title]);
+  
+  // }
+
+
   return (
     <Nav>
-      <div className={classes.root}>
-        <div className={classes.sLeft}>
-          <Paper className={classes.mainFeaturedPost}>
-            {
-              <img
-                style={{ display: "none" }}
-                src={post.image}
-                alt={post.imageText}
-              />
-            }
-            <div className={classes.overlay} />
-            <Grid container spacing={2}>
-              <Grid item md={10}>
-                <div className={classes.mainFeaturedPostContent}>
-                  <Typography
-                    component="h1"
-                    variant="title"
-                    color="inherit"
-                    gutterBottom
-                  >
-                    {post.title}
-                  </Typography>
-                  <br />
-                  <Typography
-                    variant="body"
-                    color="inherit"
-                    component="p"
-                    align="left"
-                  >
-                    {contentMapped}
-                  </Typography>
-                  <br />
-                  <Link
-                    variant="subtitle1"
-                    color="secondary"
-                    href={post.url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Explore more...
-                  </Link>
-                  <Typography
-                    variant="body2"
-                    color="inherit"
-                    paragraph
-                    align="left"
-                  >
-                    tags: {post?.tags?.join(", ")}
-                  </Typography>
-                  {loggedContext.logState && (
-                    <Grid
-                      container
-                      spacing={2}
-                      style={{
-                        backgroundColor: "DarkSlateGrey",
-                        display: "flex",
-                        padding: "0.1em",
-                      }}
+      <LoadingOverlay
+          active={active}
+          spinner
+          text="Grabbing a new TLDR..."
+        >
+        <div className={classes.root}>
+          <div className={classes.sLeft}>
+            <Paper className={classes.mainFeaturedPost}>
+              {
+                <img
+                  style={{ display: "none" }}
+                  src={post.image}
+                  alt={post.imageText}
+                />
+              }
+              <div className={classes.overlay} />
+              <Grid container spacing={2}>
+                <Grid item md={10}>
+                  <div className={classes.mainFeaturedPostContent}>
+                    <Typography
+                      component="h1"
+                      variant="title"
+                      color="inherit"
+                      gutterBottom
                     >
-                      <Grid item xs={12} sm={9}>
-                        <TextField
-                          label="Pen your thoughts here"
-                          variant="outlined"
-                          name="body"
-                          color="secondary"
-                          onChange={handleCommentChange}
-                          fullWidth
-                          gutterBottom
-                          error
-                        />
+                      {post.title}
+                    </Typography>
+                    <br />
+                    <Typography
+                      variant="body"
+                      color="inherit"
+                      component="p"
+                      align="left"
+                    >
+                      {contentMapped}
+                    </Typography>
+                    <br />
+                    <Link
+                      variant="subtitle1"
+                      color="secondary"
+                      href={post.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Explore more...
+                    </Link>
+                    <Typography
+                      variant="body2"
+                      color="inherit"
+                      paragraph
+                      align="left"
+                    >
+                      tags: {post?.tags?.join(", ")}
+                    </Typography>
+                    {loggedContext.logState && (
+                      <Grid
+                        container
+                        spacing={2}
+                        style={{
+                          backgroundColor: "DarkSlateGrey",
+                          display: "flex",
+                          padding: "0.1em",
+                        }}
+                      >
+                        <Grid item xs={12} sm={9}>
+                          <TextField
+                            label="Pen your thoughts here"
+                            variant="outlined"
+                            name="body"
+                            color="secondary"
+                            onChange={handleCommentChange}
+                            fullWidth
+                            gutterBottom
+                            error
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                          <Button
+                            variant="outlined"
+                            className={classes.btn}
+                            color="secondary"
+                            onClick={handleComment}
+                          >
+                            Comment
+                          </Button>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={12} sm={3}>
-                        <Button
-                          variant="outlined"
-                          className={classes.btn}
-                          color="secondary"
-                          onClick={handleComment}
-                        >
-                          Comment
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  )}
+                    )}
 
-                  {!isSaved && (
-                    <Button
-                      variant="contained"
-                      className="btn"
-                      onClick={handleSave}
-                      style={{ width: "110px" }}
-                    >
-                      Save
-                    </Button>
-                  )}
-                  {isSaved && (
-                    <Button
-                      variant="contained"
-                      className="btn"
-                      onClick={handleRemove}
-                      style={{ width: "110px" }}
-                    >
-                      Remove
-                    </Button>
-                  )}
-                </div>
+                    {!isSaved && (
+                      <Button
+                        variant="contained"
+                        className="btn"
+                        onClick={handleSave}
+                        style={{ width: "110px" }}
+                      >
+                        Save
+                      </Button>
+                    )}
+                    {isSaved && (
+                      <Button
+                        variant="contained"
+                        className="btn"
+                        onClick={handleRemove}
+                        style={{ width: "110px" }}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </div>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
-          <Accordion
-            expanded={expanded === "panel1"}
-            onChange={handleChange("panel1")}
-            disabled={loadComments.length === 0}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-              id="panel1bh-header"
+            </Paper>
+            <Accordion
+              expanded={expanded === "panel1"}
+              onChange={handleChange("panel1")}
+              disabled={loadComments.length === 0}
             >
-              <Typography className={classes.heading}>
-                View Comments({loadComments.length})
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Typography className={classes.heading}>
+                  View Comments({loadComments.length})
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container className={classes.comments}>
+                  {commentSection}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+          <div className={classes.sRight}>
+            <div className={classes.SRtop}>
+              <Typography variant="h5" style={{ backgroundColor: "Gainsboro" }}>
+                Primers
               </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container className={classes.comments}>
-                {commentSection}
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-        <div className={classes.sRight}>
-          <div className={classes.SRtop}>
-            <Typography variant="h5" style={{ backgroundColor: "Gainsboro" }}>
-              Primers
-            </Typography>
               {primerSection}
-          </div>
-          <div className={classes.SRbottom}>
-            <Typography variant="h5" style={{ backgroundColor: "Gainsboro" }}>
-              Similar News
-            </Typography>
-            <SimilarNews post={post} newsAPI={newsAPI}/>
+            </div>
+            <div className={classes.SRbottom}>
+              <Typography variant="h5" style={{ backgroundColor: "Gainsboro" }}>
+                Similar News
+              </Typography>
+              <SimilarNews post={searchQuery} data={data} active={active} setActive={setActive}/>
+            </div>
           </div>
         </div>
-      </div>
+      </LoadingOverlay>
     </Nav>
   );
 }

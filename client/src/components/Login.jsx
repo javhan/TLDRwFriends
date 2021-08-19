@@ -71,7 +71,6 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     axiosInstance
       .post(`token/`, {
         username: formData.username,
@@ -108,6 +107,7 @@ export default function Login() {
           <CssBaseline />
           <div className={classes.paper}>
             <img src={mainLogo} alt="login-logo" style={{width:'12em', height:'8em'}}/>
+            <br />
             <Typography component="h1" variant="h5" >
               Log in
             </Typography>

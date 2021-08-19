@@ -53,7 +53,6 @@ export default function Register() {
   })
 
   const [formData, updateFormData] = useState(initialFormData);
-  const [missingField, updateMissingField] = useState(false);
 
   const handleChange = (e) => {
       updateFormData({
@@ -65,11 +64,13 @@ export default function Register() {
   const handleSubmit = (e) => {
       e.preventDefault();
       if(formData.first_name === "" || formData.last_name === "" || formData.username === "" || formData.email === "" || formData.password === "") {
-        updateMissingField(true)
+        alert("Please Enter All Fields!")
         return
       }
-      console.log(formData);
-
+      if (formData.password.length < 6) {
+        alert("Please Enter A Valid Password (6 Or More Characters)")
+        return
+      }
       axiosInstance
         .post(`users/`, {
             email: formData.email,
@@ -79,7 +80,10 @@ export default function Register() {
             last_name: formData.last_name
         })
         .then((res) => {
-            updateMissingField(false);
+            console.log(res.status)
+            if (res.status === 400) {
+              alert("Username/Email Taken")
+            }
             history.push('/login');
             console.log(res);
             console.log(res.data);
@@ -182,7 +186,6 @@ export default function Register() {
               </Grid>
             </Grid>
           </form>
-          {missingField && <span>Check All Fields</span>}
         </div>
         <Box mt={5}>
           <Copyright />

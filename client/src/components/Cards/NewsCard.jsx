@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../../axios";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -36,14 +36,22 @@ const useStyles = makeStyles({
     },
 });
 
-export default function NewsCard({ article }) {
+export default function NewsCard({ post, article, setActive }) {
     const classes = useStyles();
     const history = useHistory();
     const [loading, setLoading] = useState("false");
+    const [activeState, setActiveState] = useState(0)
+
+    console.log("NEWCARD POST ", post)
+
+    useEffect(() => {
+        setActiveState(activeState => activeState + 1)
+    }, [post])
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(!loading);
+        setActive(true)
 
         axiosInstance
             .post(`summaries-shorten/`, {
@@ -51,6 +59,7 @@ export default function NewsCard({ article }) {
             })
             .then((res) => {
                 console.log("res: ", res);
+                setActive(false)
                 history.push("/shortened", res?.data);
             })
             .catch((err) => {

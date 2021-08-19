@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://tldr-with-friends.herokuapp.com/api/";
+const baseURL = "http://localhost:8000/api/";
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -38,8 +38,18 @@ axiosInstance.interceptors.response.use(
             return Promise.reject(error);
         }
 
+        if (error.response.status === 401) {
+            alert("Please Check Username/Password");
+            return Promise.reject(error);
+        }
+
         if (error.response.status === 505) {
             alert("Please Enter A Valid URL");
+            return Promise.reject(error);
+        }
+
+        if (error.response.status === 400) {
+            alert("Username/Email Taken");
             return Promise.reject(error);
         }
         // }
