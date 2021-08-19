@@ -8,6 +8,7 @@ import {
     CardContent,
     CardMedia,
     Divider,
+    Link,
     Typography,
 } from "@material-ui/core/";
 
@@ -34,33 +35,42 @@ export default function NewsCard({ article }) {
     return (
         <Card className={classes.root}>
             <CardActionArea>
-                <CardMedia
+                {article.media && <CardMedia
                     className={classes.media}
                     image={article.media}
                     title={article.title}
-                />
+                />}
                 <CardContent>
                     <Typography gutterBottom variant="subtitle2">
                         {article.title}
                     </Typography>
-                    <Typography
+                    {article.summary && <Typography
                         variant="caption"
                         color="textSecondary"
                         component="p"
                     >
                         {article?.summary?.slice(0, 100) + "..."}
-                    </Typography>
+                    </Typography>}
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button
+                {article.media && <Button
                     variant="contained"
                     size="small"
                     color="secondary"
                     className={classes.tldr}
                 >
                     TLDR this
-                </Button>
+                </Button>}
+                {article.link && <Link
+                    variant="subtitle1"
+                    color="secondary"
+                    href={article.link || article.url}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    Explore more
+                </Link>}
             </CardActions>
             <Divider />
         </Card>
