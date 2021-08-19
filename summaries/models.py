@@ -22,3 +22,13 @@ class Summary(models.Model):
         )
     url = models.TextField(blank=True, null=True)
     title = models.TextField(blank=True, null=True)
+    primers = ArrayField(
+        ArrayField(
+            models.TextField(blank=True, null =True),
+            size=2,
+            null=True,
+        ),
+        size=5,
+        null=True,
+        blank=True,
+    )

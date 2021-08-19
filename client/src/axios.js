@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:8000/api/";
+const baseURL = "https://tldr-with-friends.herokuapp.com/api/";
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
-    timeout: 30000,
+    timeout: 3000000,
     headers: {
         Authorization: localStorage.getItem("access_token")
             ? "JWT " + localStorage.getItem("access_token")

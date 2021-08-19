@@ -28,6 +28,7 @@ class GetSummaryViewSet(mixins.CreateModelMixin,viewsets.GenericViewSet):
             serializer.validated_data['content'] = scraped['content']
             serializer.validated_data['title'] = scraped['title']
             serializer.validated_data['tags'] = scraped['tags']
+            serializer.validated_data['primers'] = scraped['primers']
             
             serializer.save()
             headers = self.get_success_headers(serializer.data)
