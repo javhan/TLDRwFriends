@@ -91,7 +91,7 @@ function Shortened(props) {
   console.log("PROPS", props);
   console.log("POST", post);
 
-  const [isSaved, setSaved] = useState(post.user);
+  const [isSaved, setSaved] = useState(post?.user);
   const [expanded, setExpanded] = useState(false);
   const [loadComments, setLoadComments] = useState([]);
   const [commentField, setCommentField] = useState();
@@ -259,7 +259,7 @@ function Shortened(props) {
   };
   console.log(loggedContext?.logState?.post);
 
-  const primerSection = post.primers.map((primer, index) => {
+  const primerSection = post?.primers?.map((primer, index) => {
     const article = {
         title: "What is " + primer[0],
         link: primer[1],

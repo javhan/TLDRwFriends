@@ -18,6 +18,7 @@ def primerChecker(param, text):
     score = 0
     for i in links:
         try:
+            print("HIT")
             test=scraper(i)
             points = referenceText.similarity(test)
             if (points > score):
@@ -26,3 +27,4 @@ def primerChecker(param, text):
         except:
             pass
     return top_scorer
+
