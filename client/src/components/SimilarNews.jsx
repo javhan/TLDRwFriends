@@ -21,17 +21,17 @@ const useStyles = makeStyles((theme) => ({
 
 const RAPIDAPI = process.env.REACT_APP_RAPIDAPI;
 
-const SimilarNews = ({ topic }) => {
+const SimilarNews = ({ post, newsAPI }) => {
     const classes = useStyles();
 
     const [data, setData] = useState([]);
-    const [toggle, setToggle] = useState(false);
-
+    const [toggle, setToggle] = useState(post.id);
+    console.log(toggle)
     const options = {
         method: "GET",
         url: "https://free-news.p.rapidapi.com/v1/search",
         params: {
-            q: `${topic}`,
+            q: `${post.title}`,
             lang: "en",
             page: "1",
         },
@@ -47,7 +47,6 @@ const SimilarNews = ({ topic }) => {
             .then((res) => {
                 console.log(res.data);
                 setData(res.data.articles);
-                setToggle(!toggle);
             })
             .catch((err) => console.log(err));
     }, [toggle]);
