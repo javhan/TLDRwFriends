@@ -87,7 +87,8 @@ function Shortened(props) {
 
     const post = props?.location?.state;
 
-    console.log(post);
+    console.log("PROPS", props)
+    console.log("POST", post);
 
     const [isSaved, setSaved] = useState(post.user);
     const [expanded, setExpanded] = useState(false);
@@ -141,7 +142,7 @@ function Shortened(props) {
     const deleteComment = (commentID) => {
         axiosInstance.delete(`comments/${commentID}`).then((res) => {
             if (res.status === 204) {
-                window.location.reload();
+                toggleFetcher((fetcher) => fetcher + 1);
             }
         });
     };
@@ -241,9 +242,10 @@ function Shortened(props) {
                 user: loggedContext.logState.user_id,
             })
             .then((res) => {
-                setSaved(post.user);
-                console.log(res);
-            });
+                console.log("RES.data", res.data);
+                setSaved(res.data.user);
+            })
+            .then(toggleFetcher((fetcher) => fetcher + 1))
     };
 
     const handleRemove = (e) => {
@@ -257,9 +259,9 @@ function Shortened(props) {
                 user: "",
             })
             .then((res) => {
-                setSaved();
-                console.log(res);
-            });
+                setSaved(res.data.user);
+            })
+            .then(toggleFetcher((fetcher) => fetcher + 1))
     };
     console.log(loggedContext?.logState?.post);
 
