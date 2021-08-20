@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import Homepage from "./components/Homepage";
 import Register from "./components/Register";
-import Dashboard from "./components/Dashboard";
+// import Dashboard from "./components/Dashboard";
 import Vault from "./components/Vault"
 import Shortened from "./components/Shortened"
 
@@ -54,7 +54,7 @@ function App() {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Register} />
             <Route path="/logout" component={Logout} />
-            <Route path="/dashboard" component={Dashboard} />
+            {/* <Route path="/dashboard" component={Dashboard} /> */}
             <PrivateRoute path="/vault" component={Vault} />
             <Route path="/shortened" component={Shortened} />
             <Redirect to="/"/>

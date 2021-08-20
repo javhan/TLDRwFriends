@@ -8,7 +8,7 @@ from heapq import nlargest
 """Settings for Summary Processing"""
 TLDR_LEVEL = 0.5
 MAX_SENTENCES = 5
-MAX_TOPICS = 5
+MAX_TOPICS = 4
 ENTITY_ARRAY = ["ORG", "PRODUCT", "PERSON", "NORG", "GPE"]
 
 def make_summary(text):

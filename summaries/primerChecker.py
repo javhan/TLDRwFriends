@@ -14,7 +14,7 @@ def scraper(url):
     return nlp(str(article.keywords))
 
 def primerChecker(text, param):
-    links = search(f"What is {param}", num_results=5)
+    links = search(f"What is {param}", num_results=3)
     top_scorer = [param, ""]
     score = 0
     def scoreCheck(link):
