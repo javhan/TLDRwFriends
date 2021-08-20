@@ -289,7 +289,7 @@ function Shortened(props) {
 
     const searchQuery = post?.title //take first 5 words of title
     .split(" ")
-    .filter((_, i) => i < 5)
+    .filter((_, i) => i < 3)
     .join(" ");
   
     console.log("searching for ", searchQuery);
