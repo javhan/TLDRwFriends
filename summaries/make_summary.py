@@ -66,14 +66,11 @@ def make_summary(text):
     scraped['tags'] = list(get_topics(str(summary)))
     strSummary = nlp(str(summary))
     
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        result = executor.map(lambda tag: primerChecker(strSummary,tag), scraped['tags'])
-        scraped['primers'] = list(result)
-        
-        
-
-    
-    # scraped['primers'] = [primerChecker(tag,strSummary) for tag in scraped['tags']]
+    # with concurrent.futures.ThreadPoolExecutor() as executor:
+    #     result = executor.map(lambda tag: primerChecker(strSummary,tag), scraped['tags'])
+    #     scraped['primers'] = list(result)
+            
+    scraped['primers'] = [primerChecker(tag,strSummary) for tag in scraped['tags']]
 
     return scraped
 
