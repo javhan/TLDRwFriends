@@ -320,9 +320,6 @@ function Shortened(props) {
           .catch((err) => console.log(err));
   }, [post?.title]);
   
-  // }
-
-
   return (
     <Nav>
       <LoadingOverlay

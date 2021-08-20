@@ -97,6 +97,7 @@ function Homepage() {
             })
             .catch((err) => {
                 console.log(err);
+                window.location.reload()
                 setUrl("");
                 setLoading(!loading);
             });
