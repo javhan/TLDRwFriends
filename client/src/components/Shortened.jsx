@@ -314,8 +314,8 @@ function Shortened(props) {
           .request(options)
           .then((res) => {
               console.log(res.data);
-              res.data.articles.shift()
-              setData(res.data.articles);
+              res?.data?.articles?.shift()
+              setData(res?.data?.articles);
           })
           .catch((err) => console.log(err));
   }, [post?.title]);

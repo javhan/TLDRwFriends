@@ -37,9 +37,9 @@ function Nav(props) {
           <div className="navRight">
             <Link to="/vault">Vault</Link>
           </div>
-          <div className="navRight">
+          {/* <div className="navRight">
             <Link to="/dashboard">Dashboard</Link>
-          </div>
+          </div> */}
         </div>
         <div>{props.children}</div>
       </> 
