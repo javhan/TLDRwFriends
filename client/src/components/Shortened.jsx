@@ -384,7 +384,7 @@ function Shortened(props) {
                         container
                         spacing={2}
                         style={{
-                          backgroundColor: "DarkSlateGrey",
+                          backgroundColor: "WhiteSmoke",
                           display: "flex",
                           padding: "0.1em",
                         }}

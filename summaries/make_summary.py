@@ -70,7 +70,7 @@ def make_summary(text):
     #     result = executor.map(lambda tag: primerChecker(strSummary,tag), scraped['tags'])
     #     scraped['primers'] = list(result)
             
-    scraped['primers'] = [primerChecker(tag,strSummary) for tag in scraped['tags']]
+    scraped['primers'] = [primerChecker(strSummary,tag) for tag in scraped['tags']]
 
     return scraped
 
